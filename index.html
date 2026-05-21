@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kiwi English">
+<title>Kiwi English</title>
+<style>
+:root{--bg:#fff;--bg2:#f6f6f6;--bg3:#efefef;--text:#1a1a1a;--text2:#555;--text3:#999;--border:#e8e8e8;--border2:#ccc;--blue:#185FA5;--green:#0F6E56;--red:#A32D2D;--yellow:#FFF0A0;--yellowt:#7A6000;}
+@media(prefers-color-scheme:dark){:root{--bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--text:#f0f0f0;--text2:#aaa;--text3:#666;--border:#3a3a3c;--border2:#555;}}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh}
+.pill{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;display:inline-block}
+.py{background:var(--yellow);color:var(--yellowt)}
+.pb{background:#E6F1FB;color:#185FA5}
+.pt{background:#E1F5EE;color:#0F6E56}
+.pr{background:#FCEBEB;color:#A32D2D}
+.pp{background:#EEEDFE;color:#534AB7}
+.pg{background:#EAF3DE;color:#3B6D11}
+.pn{background:var(--bg3);color:var(--text2)}
+.card{background:var(--bg);border-radius:16px;border:.5px solid var(--border);overflow:hidden}
+.pad{padding:1rem 1rem 6rem}
+.label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)}
+.title{font-size:17px;font-weight:500;color:var(--text);margin-top:2px}
+.word{font-family:Georgia,'Times New Roman',serif;font-size:28px;color:var(--text);line-height:1.2;margin-bottom:.3rem}
+.btn-a{flex:1;padding:11px 0;border-radius:10px;font-size:13px;font-weight:500;border:.5px solid;background:transparent;cursor:pointer;font-family:inherit;color:inherit}
+.bk{border-color:#1D9E75;color:#0F6E56}.bu{border-color:#378ADD;color:#185FA5}.bn{border-color:#E24B4A;color:#A32D2D}
+.stat{background:var(--bg2);border-radius:10px;padding:.75rem;text-align:center}
+.sn{font-size:20px;font-weight:500}.sl{font-size:10px;color:var(--text3);margin-top:1px}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--bg);border-top:.5px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 8px;gap:3px;border:none;background:transparent;cursor:pointer;font-family:inherit}
+.nl{font-size:10px;font-weight:500}
+.fb{font-size:11px;padding:4px 10px;border-radius:20px;border:.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:inherit}
+.fb.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.pbbar{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.pbfill{height:100%;background:#378ADD;border-radius:3px;transition:width .3s}
+.sbtn{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:500;font-family:inherit;cursor:pointer}
+.sbtn:disabled{opacity:.4}
+.msg{padding:.75rem 1rem;border-radius:12px;font-size:13px;line-height:1.6;margin-bottom:.5rem}
+.mu{background:#E6F1FB;color:#0C447C;margin-left:2rem}
+.ma{background:var(--bg2);color:var(--text);margin-right:2rem}
+.mf{background:#E1F5EE;color:#085041;margin-right:2rem;border-left:3px solid #1D9E75;padding-left:.875rem}
+
+.flip-container{width:100%;margin-bottom:.875rem;perspective:1200px;-webkit-perspective:1200px}
+.flip-card{width:100%;position:relative;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);-webkit-transition:-webkit-transform .55s cubic-bezier(.4,0,.2,1);cursor:pointer;min-height:200px}
+.flip-card.flipped{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;width:100%;min-height:200px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;border:.5px solid var(--border);background:var(--bg);overflow:hidden}
+.flip-back{transform:rotateY(180deg);-webkit-transform:rotateY(180deg)}
+.flip-spacer{min-height:200px;visibility:hidden}
+
+textarea,input[type=text]{background:var(--bg2);border:.5px solid var(--border2);border-radius:10px;padding:.75rem;font-size:14px;font-family:inherit;color:var(--text);width:100%;resize:none;outline:none}
+input[type=text]{padding:10px 14px}
+.quiz-opt{border:.5px solid var(--border2);border-radius:10px;padding:12px 14px;font-size:13px;text-align:left;cursor:pointer;font-family:inherit;line-height:1.5;background:var(--bg);color:var(--text);width:100%;display:block;margin-bottom:8px;transition:all .2s}
+.task-row{display:flex;align-items:center;gap:12px;padding:1rem;background:var(--bg2);border-radius:12px;margin-bottom:.75rem;cursor:pointer;border:.5px solid var(--border)}
+.task-row.done{border-color:#1D9E75;background:#E1F5EE10}
+.task-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.task-row.done .task-check{border-color:#1D9E75;background:#1D9E75;color:#fff}
+.task-info{flex:1}
+.task-title{font-size:15px;font-weight:500;color:var(--text)}
+.task-row.done .task-title{color:var(--text3)}
+.task-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.task-arrow{font-size:18px;color:var(--text3)}
+.task-row.done .task-arrow{display:none}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1rem;border-bottom:.5px solid var(--border)}
+.settings-label{font-size:14px;color:var(--text)}
+.settings-val{display:flex;gap:6px}
+.settings-btn{font-size:12px;padding:4px 12px;border-radius:20px;border:.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:inherit}
+.settings-btn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.speak-btn{border:none;background:transparent;cursor:pointer;font-size:15px;padding:0 0 0 6px;vertical-align:middle;color:var(--blue)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav class="nav" id="nav">
+  <button class="ni" data-t="today" onclick="go('today')" style="color:var(--blue)"><span style="font-size:22px">📋</span><span class="nl">今日</span></button>
+  <button class="ni" data-t="flash" onclick="go('flash')" style="color:var(--text3)"><span style="font-size:22px">📚</span><span class="nl">闪卡</span></button>
+  <button class="ni" data-t="quiz" onclick="go('quiz')" style="color:var(--text3)"><span style="font-size:22px">✏️</span><span class="nl">测验</span></button>
+  <button class="ni" data-t="write" onclick="go('write')" style="color:var(--text3)"><span style="font-size:22px">📝</span><span class="nl">造句</span></button>
+  <button class="ni" data-t="speak" onclick="go('speak')" style="color:var(--text3)"><span style="font-size:22px">💬</span><span class="nl">对话</span></button>
+  <button class="ni" data-t="prog" onclick="go('prog')" style="color:var(--text3)"><span style="font-size:22px">📊</span><span class="nl">进度</span></button>
+</nav>
+<script>
+const V=[
+  {id:"w1",e:"assume",z:"假设/认为（不是评估）",x:"Don\'t assume HQ will approve it — always confirm first.",c:"verb",t:"correction"},
+  {id:"w2",e:"clarify",z:"澄清/说清楚（不是声明）",x:"Could you clarify the timeline for compliance review?",c:"verb",t:"correction"},
+  {id:"w3",e:"consult",z:"咨询/请教（不是结果）",x:"I\'ll consult the legal team before finalising the claim.",c:"verb",t:"correction"},
+  {id:"w4",e:"enable",z:"使……成为可能（不是能力）",x:"This AI tool enables us to screen 100 KOLs in 10 minutes.",c:"verb",t:"correction"},
+  {id:"w5",e:"enhance",z:"提升/加强（不是扩大）",x:"The partnership enhanced our credibility with premium users.",c:"verb",t:"correction"},
+  {id:"w6",e:"fulfill",z:"实现/履行（不是填充）",x:"We fulfilled all campaign KPIs ahead of the deadline.",c:"verb",t:"correction"},
+  {id:"w7",e:"identify",z:"识别/找出（不是身份）",x:"We need to identify the top-performing content formats on RedNote.",c:"verb",t:"correction"},
+  {id:"w8",e:"justify",z:"证明合理（不是明确）",x:"Can you justify the budget increase with projected ROI data?",c:"verb",t:"correction"},
+  {id:"w9",e:"leverage",z:"利用/借助（不是平均）",x:"We can leverage our KOC network to amplify the campaign.",c:"verb",t:"correction"},
+  {id:"w10",e:"measure",z:"衡量（不是方法）",x:"How do we measure the long-term impact of brand campaigns?",c:"verb",t:"correction"},
+  {id:"w11",e:"modify",z:"修改/调整（不是模块化）",x:"We may need to modify the creative direction based on HQ feedback.",c:"verb",t:"correction"},
+  {id:"w12",e:"motivate",z:"激励（不是驱动）",x:"What motivates premium moms to share organic parenting content?",c:"verb",t:"correction"},
+  {id:"w13",e:"optimize",z:"优化（不是最大化）",x:"Let\'s optimise the seeding strategy based on last month\'s CPE data.",c:"verb",t:"correction"},
+  {id:"w14",e:"overcome",z:"克服（不是结果）",x:"We overcame the budget constraint by leveraging brand partnerships.",c:"verb",t:"correction"},
+  {id:"w15",e:"propose",z:"提议/建议（不是目标）",x:"I\'d like to propose a phased approach to the brand campaign rollout.",c:"verb",t:"correction"},
+  {id:"w16",e:"reflect",z:"反映/体现（不是冲突）",x:"The results reflect strong consumer resonance with our message.",c:"verb",t:"correction"},
+  {id:"w17",e:"generate",z:"产生/创造（不是提升）",x:"This content series will generate organic discussion among premium moms.",c:"verb",t:"correction"},
+  {id:"w18",e:"maintain",z:"维持/保持（不是占据）",x:"Our goal is to maintain market leadership in the organic formula category.",c:"verb",t:"correction"},
+  {id:"w19",e:"acquire",z:"获取/获得（不是要求）",x:"We need to acquire new users through the RedNote seeding campaign.",c:"verb",t:"correction"},
+  {id:"w20",e:"implement",z:"执行/落实（不是元素）",x:"We\'ll implement the new brand guidelines starting next quarter.",c:"verb",t:"correction"},
+  {id:"w21",e:"facilitate",z:"促进/推动（不是能力）",x:"The session will facilitate alignment between brand and digital teams.",c:"verb",t:"correction"},
+  {id:"w22",e:"sustainable",z:"可持续的（不是连续的）",x:"We need a sustainable content strategy, not just one-off campaigns.",c:"verb",t:"correction"},
+  {id:"w23",e:"apparent",z:"明显的/显而易见的（不是区分）",x:"It\'s apparent that organic awareness is growing among premium parents.",c:"adj",t:"correction"},
+  {id:"w24",e:"comprehensive",z:"全面的/综合的（不是复杂的）",x:"We need a comprehensive go-to-market plan for the new SKU launch.",c:"adj",t:"correction"},
+  {id:"w25",e:"considerable",z:"相当大的/可观的（不是舒适的）",x:"The campaign generated a considerable increase in brand search volume.",c:"adj",t:"correction"},
+  {id:"w26",e:"consistent",z:"一致的/始终如一的（不是连续的）",x:"We need consistent brand messaging across all consumer touchpoints.",c:"adj",t:"correction"},
+  {id:"w27",e:"critical",z:"关键的/至关重要的（不是批判的）",x:"Consumer trust is critical to maintaining our premium positioning.",c:"adj",t:"correction"},
+  {id:"w28",e:"dominant",z:"主导的/占主导地位的（不是捐赠）",x:"We are the dominant brand in cross-border organic formula.",c:"adj",t:"correction"},
+  {id:"w29",e:"essential",z:"必不可少的/核心的（不是基础的）",x:"Traceability is essential to rebuilding consumer trust in the brand.",c:"adj",t:"correction"},
+  {id:"w30",e:"evident",z:"明显的/显而易见的（不是可信的）",x:"It\'s evident from the data that RedNote drives the highest CPE efficiency.",c:"adj",t:"correction"},
+  {id:"w31",e:"fundamental",z:"根本的/核心的（比essential更深）（不是基础的）",x:"Organic integrity is fundamental to everything we stand for.",c:"adj",t:"correction"},
+  {id:"w32",e:"gradual",z:"逐渐的/循序渐进的（不是成长的）",x:"Brand awareness building is a gradual process — don\'t expect overnight results.",c:"adj",t:"correction"},
+  {id:"w33",e:"optimal",z:"最优的/最佳的（不是积极的）",x:"What\'s the optimal timing to launch the campaign in this market?",c:"adj",t:"correction"},
+  {id:"w34",e:"progressive",z:"进步的/循序渐进的（不是在过程中的）",x:"We need a progressive approach to expanding into Southeast Asia.",c:"adj",t:"correction"},
+  {id:"w35",e:"rational",z:"理性的/合理的（不是区域的）",x:"Premium moms are rational decision-makers — they research before buying.",c:"adj",t:"correction"},
+  {id:"w36",e:"remarkable",z:"卓越的/非凡的（不是标记的）",x:"The campaign achieved a remarkable 1:13 referral coefficient.",c:"adj",t:"correction"},
+  {id:"w37",e:"significant",z:"重要的/显著的（不是满意的）",x:"There was a significant increase in brand awareness after the campaign.",c:"adj",t:"correction"},
+  {id:"w38",e:"transparent",z:"透明的（不是转换的）",x:"Being transparent about our sourcing builds long-term consumer trust.",c:"adj",t:"correction"},
+  {id:"w39",e:"accurate",z:"准确的",x:"We need accurate data before presenting to the leadership team.",c:"adj",t:"correction"},
+  {id:"w40",e:"appropriate",z:"合适的/恰当的",x:"Make sure the tone is appropriate for a premium brand audience.",c:"adj",t:"correction"},
+  {id:"w41",e:"explicit",z:"明确的/清晰的",x:"The brief should be explicit about what claims we can and cannot make.",c:"adj",t:"correction"},
+  {id:"w42",e:"substantial",z:"大量的/实质性的",x:"There\'s a substantial opportunity in the sensitive baby segment.",c:"adj",t:"correction"},
+  {id:"w43",e:"adequate",z:"足够的/充分的（够用就行，不是perfect）",x:"The current budget is adequate for a pilot, but not for a full rollout.",c:"adj",t:"correction"},
+  {id:"w44",e:"crucial",z:"至关重要的（比critical更强）",x:"It\'s crucial that we get HQ sign-off before the campaign goes live.",c:"adj",t:"correction"},
+  {id:"w45",e:"genuine",z:"真实的/真诚的",x:"We need genuine user stories, not scripted testimonials.",c:"adj",t:"correction"},
+  {id:"w46",e:"decline",z:"下降 / 拒绝",x:"Sales declined in Q1, which is why we need a stronger brand campaign.",c:"verb",t:"blank"},
+  {id:"w47",e:"derive",z:"来源于 / 获得",x:"This insight was derived from our Mystery Shopper programme data.",c:"verb",t:"blank"},
+  {id:"w48",e:"determine",z:"决定 / 确定",x:"The CMO will determine the final budget allocation next week.",c:"verb",t:"blank"},
+  {id:"w49",e:"eliminate",z:"消除 / 排除",x:"We need to eliminate the bottleneck in the HQ approval process.",c:"verb",t:"blank"},
+  {id:"w50",e:"examine",z:"检查 / 审查",x:"Let\'s examine the campaign data before making any changes.",c:"verb",t:"blank"},
+  {id:"w51",e:"exceed",z:"超过 / 超越",x:"Our CPE exceeded the industry benchmark by 50%.",c:"verb",t:"blank"},
+  {id:"w52",e:"execute",z:"执行 / 落实",x:"The team executed the campaign flawlessly and within budget.",c:"verb",t:"blank"},
+  {id:"w53",e:"initiate",z:"发起 / 启动",x:"I\'d like to initiate a monthly sync with the compliance team.",c:"verb",t:"blank"},
+  {id:"w54",e:"monitor",z:"监测 / 跟踪",x:"We\'ll monitor the seeding performance on a weekly basis.",c:"verb",t:"blank"},
+  {id:"w55",e:"obtain",z:"获得 / 取得",x:"We need to obtain sign-off from HQ before publishing the content.",c:"verb",t:"blank"},
+  {id:"w56",e:"indicate",z:"表明 / 显示",x:"The data indicates strong growth potential in this segment.",c:"verb",t:"blank"},
+  {id:"w57",e:"distribute",z:"分发 / 分销",x:"Please distribute the updated brand guidelines to all team members.",c:"verb",t:"blank"},
+  {id:"w58",e:"integrate",z:"整合 / 融合",x:"We need to integrate the brand narrative into every consumer touchpoint.",c:"verb",t:"blank"},
+  {id:"w59",e:"interpret",z:"解读 / 诠释",x:"How we interpret consumer insights will shape our entire strategy.",c:"verb",t:"blank"},
+  {id:"w60",e:"anticipate",z:"预判 / 预期",x:"We anticipate strong engagement from the organic parenting content series.",c:"verb",t:"blank"},
+  {id:"w61",e:"prioritize",z:"优先处理",x:"Given limited budget, we should prioritise brand awareness over conversion.",c:"verb",t:"blank"},
+  {id:"w62",e:"coordinate",z:"协调 / 统筹",x:"I\'ll coordinate with the digital team to align on the content calendar.",c:"verb",t:"blank"},
+  {id:"w63",e:"demonstrate",z:"证明 / 展示",x:"This campaign demonstrates our commitment to organic parenting values.",c:"verb",t:"blank"},
+  {id:"w64",e:"accommodate",z:"适配 / 满足需求",x:"Global brand guidelines need to accommodate local market needs.",c:"verb",t:"blank"},
+  {id:"w65",e:"distinguish",z:"区分 / 使与众不同",x:"What distinguishes us is our full-chain organic sourcing.",c:"verb",t:"blank"},
+  {id:"w66",e:"submit",z:"提交",x:"Please submit the campaign brief by Thursday for CMO review.",c:"verb",t:"blank"},
+  {id:"w67",e:"allocate",z:"分配",x:"We need to allocate at least 30% of the budget to brand awareness.",c:"verb",t:"blank"},
+  {id:"w68",e:"outline",z:"概述 / 列出要点",x:"Please outline the key campaign objectives in the brief.",c:"verb",t:"blank"},
+  {id:"w69",e:"approval",z:"审批/批准",x:"We\'re still waiting for HQ approval on the campaign creative.",c:"noun",t:"blank"},
+  {id:"w70",e:"differentiator",z:"差异化优势",x:"Our key differentiator is our 8-year track record as the #1 organic formula.",c:"noun",t:"blank"},
+  {id:"w71",e:"bottleneck",z:"瓶颈",x:"The HQ approval process is our biggest bottleneck for execution speed.",c:"noun",t:"blank"},
+  {id:"w72",e:"momentum",z:"势头/动力",x:"We need to maintain the momentum from the successful campaign launch.",c:"noun",t:"blank"},
+  {id:"w73",e:"trajectory",z:"轨迹/走向",x:"The brand is on a positive trajectory — awareness is up 20% YoY.",c:"noun",t:"blank"},
+  {id:"w74",e:"mandate",z:"授权/任务指令",x:"The CMO\'s mandate is to build brand equity in China within 12 months.",c:"noun",t:"blank"},
+  {id:"w75",e:"cadence",z:"节奏/频率",x:"Let\'s establish a monthly cadence for brand and digital team syncs.",c:"noun",t:"blank"},
+  {id:"w76",e:"stakeholder",z:"利益相关方",x:"Key stakeholders include the CMO, digital director, and compliance team.",c:"noun",t:"blank"},
+  {id:"w77",e:"segmentation",z:"用户分层/细分",x:"Our CRM segmentation is based on purchase frequency and spend level.",c:"noun",t:"blank"},
+  {id:"w78",e:"retention",z:"留存/保留",x:"Member retention rate is a key KPI for the premium membership programme.",c:"noun",t:"blank"},
+  {id:"w79",e:"attribution",z:"归因",x:"Campaign attribution is complex when users see both RedNote and Douyin ads.",c:"noun",t:"blank"},
+  {id:"w80",e:"compliance",z:"合规",x:"All content claims must pass compliance review before going live.",c:"noun",t:"blank"},
+  {id:"w81",e:"penetration",z:"渗透率",x:"Organic formula market penetration is still below 5% — huge opportunity.",c:"noun",t:"blank"},
+  {id:"w82",e:"benchmark",z:"基准值/参照标准",x:"Our CPE of RMB 1.",c:"noun",t:"blank"},
+  {id:"w83",e:"scalable",z:"可规模化的",x:"We need a scalable KOL screening system, not a manual process.",c:"noun",t:"blank"},
+  {id:"w84",e:"holistic",z:"整体的/全面的",x:"We need a holistic approach covering both brand and performance marketing.",c:"noun",t:"blank"},
+  {id:"w85",e:"granular",z:"细颗粒度的/详细的",x:"Can you provide a more granular breakdown of campaign spend by channel?",c:"noun",t:"blank"},
+  {id:"w86",e:"headroom",z:"增长空间",x:"There\'s significant headroom for growth in Southeast Asia.",c:"noun",t:"blank"},
+  {id:"w87",e:"pivot",z:"转变方向/调整策略",x:"We may need to pivot our strategy based on the pilot results.",c:"noun",t:"blank"},
+  {id:"w88",e:"substantiation",z:"宣称支撑依据",x:"We need substantiation for every product claim we make.",c:"noun",t:"blank"},
+  {id:"w89",e:"churn rate",z:"流失率",x:"Our churn rate increased in Q2 — we need a stronger retention strategy.",c:"noun",t:"blank"},
+  {id:"w90",e:"CLV / customer lifetime value",z:"用户终身价值",x:"High CLV users should receive priority treatment in our membership programme.",c:"noun",t:"blank"},
+  {id:"w91",e:"NPS / net promoter score",z:"净推荐值",x:"Our NPS among premium members is 72 — well above the category average.",c:"noun",t:"blank"},
+  {id:"w92",e:"brand equity",z:"品牌资产",x:"Eight years of leadership has built significant brand equity for the brand.",c:"ind",t:"brand"},
+  {id:"w93",e:"brand salience",z:"品牌显著性",x:"Our goal is to improve brand salience so consumers think of us first.",c:"ind",t:"brand"},
+  {id:"w94",e:"share of voice",z:"声量份额",x:"Our share of voice in organic parenting conversations is growing on RedNote.",c:"ind",t:"brand"},
+  {id:"w95",e:"top-of-mind awareness",z:"第一提及率",x:"We want to achieve top-of-mind awareness in the organic formula category.",c:"ind",t:"brand"},
+  {id:"w96",e:"brand lift",z:"品牌提升度",x:"Post-campaign research showed measurable brand lift in awareness.",c:"ind",t:"brand"},
+  {id:"w97",e:"category education",z:"品类教育",x:"We should lead category education to grow the total organic formula market.",c:"ind",t:"brand"},
+  {id:"w98",e:"earned media",z:"赢得媒体",x:"The campaign generated significant earned media coverage across platforms.",c:"ind",t:"brand"},
+  {id:"w99",e:"brand positioning",z:"品牌定位",x:"Our brand positioning centres on trust, transparency, and organic integrity.",c:"ind",t:"brand"},
+  {id:"w100",e:"brand identity",z:"品牌识别体系",x:"A strong brand identity ensures consistency across every consumer touchpoint.",c:"ind",t:"brand"},
+  {id:"w101",e:"paid seeding",z:"付费种草",x:"We are allocating RMB 500K to paid seeding on RedNote this quarter.",c:"ind",t:"digital"},
+  {id:"w102",e:"organic seeding",z:"自然种草",x:"Strong creative content drives organic seeding from genuine brand advocates.",c:"ind",t:"digital"},
+  {id:"w103",e:"KOL tiering",z:"达人分级",x:"Our KOL tiering strategy covers top-tier, mid-tier, and nano influencers.",c:"ind",t:"digital"},
+  {id:"w104",e:"always-on seeding",z:"持续种草",x:"We need an always-on seeding strategy to maintain consistent brand presence.",c:"ind",t:"digital"},
+  {id:"w105",e:"media mix",z:"媒介组合",x:"Our media mix balances paid seeding, owned channels, and earned media.",c:"ind",t:"digital"},
+  {id:"w106",e:"whitelisting",z:"白名单投放",x:"Whitelisting top-performing posts will amplify our organic reach significantly.",c:"ind",t:"digital"},
+  {id:"w107",e:"content brief",z:"内容简报",x:"The content brief must be explicit about what claims we can and cannot make.",c:"ind",t:"digital"},
+  {id:"w108",e:"campaign attribution",z:"活动归因",x:"Campaign attribution is complex when users see both paid and organic content.",c:"ind",t:"digital"},
+  {id:"w109",e:"CPE",z:"每次互动成本",x:"Our CPE of RMB 1.8 is 50% below the industry benchmark.",c:"ind",t:"digital"},
+  {id:"w110",e:"search keyword seeding",z:"搜索关键词种草",x:"Search keyword seeding ensures we capture high-intent users on RedNote.",c:"ind",t:"digital"},
+  {id:"w111",e:"regulatory compliance",z:"合规审批",x:"All marketing claims must pass regulatory compliance review before publishing.",c:"ind",t:"compliance"},
+  {id:"w112",e:"supply chain traceability",z:"供应链溯源",x:"Supply chain traceability is one of our strongest competitive advantages.",c:"ind",t:"compliance"},
+  {id:"w113",e:"sign-off",z:"审批确认",x:"We need sign-off from the Australian legal team on all health claims.",c:"ind",t:"compliance"},
+  {id:"w114",e:"localization",z:"本土化",x:"Effective localization goes beyond translation — it requires cultural adaptation.",c:"ind",t:"compliance"},
+  {id:"w115",e:"escalation",z:"升级处理",x:"If approval is delayed beyond 4 weeks, we need to escalate to the CMO.",c:"ind",t:"compliance"},
+  {id:"w116",e:"version control",z:"版本管理",x:"Please ensure version control on all brand assets shared with HQ.",c:"ind",t:"compliance"},
+  {id:"w117",e:"SKU rationalization",z:"SKU优化精简",x:"SKU rationalization helps us focus resources on the highest-performing products.",c:"ind",t:"fmcg"},
+  {id:"w118",e:"category management",z:"品类管理",x:"Category management ensures we optimise shelf presence across all channels.",c:"ind",t:"fmcg"},
+  {id:"w119",e:"sell-through rate",z:"销售率",x:"The sell-through rate for the new SKU exceeded our launch targets by 30%.",c:"ind",t:"fmcg"},
+  {id:"w120",e:"trade marketing",z:"渠道营销",x:"Trade marketing activities ensure strong shelf presence in key pharmacy channels.",c:"ind",t:"fmcg"},
+  {id:"w121",e:"volume forecasting",z:"销量预测",x:"Accurate volume forecasting is essential for supply chain planning.",c:"ind",t:"fmcg"},
+  {id:"w122",e:"price elasticity",z:"价格弹性",x:"Understanding price elasticity helps us set optimal promotional pricing.",c:"ind",t:"fmcg"},
+  {id:"w123",e:"go-to-market strategy",z:"上市策略",x:"We need a clear go-to-market strategy before the new SKU launches.",c:"ind",t:"fmcg"},
+  {id:"w124",e:"HMO",z:"人乳寡糖",x:"Our formula contains HMO, a prebiotic found naturally in breast milk.",c:"ind",t:"formula"},
+  {id:"w125",e:"DHA",z:"二十二碳六烯酸（脑部发育）",x:"DHA supports brain and eye development in infants during the first year.",c:"ind",t:"formula"},
+  {id:"w126",e:"follow-on formula",z:"较大婴儿奶粉（6-12月）",x:"Follow-on formula is designed for babies aged 6 to 12 months.",c:"ind",t:"formula"},
+  {id:"w127",e:"clean label",z:"清洁标签",x:"Our clean label positioning resonates strongly with health-conscious parents.",c:"ind",t:"formula"},
+  {id:"w128",e:"FSANZ",z:"澳新食品标准局",x:"All our products meet FSANZ certification standards for organic infant formula.",c:"ind",t:"formula"},
+  {id:"w129",e:"specialised formula",z:"特殊配方奶粉",x:"Specialised formula addresses specific needs like sensitivity or reflux.",c:"ind",t:"formula"},
+  {id:"w130",e:"organic certification",z:"有机认证",x:"Our full-chain organic certification is what sets us apart from competitors.",c:"ind",t:"formula"},
+  {id:"w131",e:"user segmentation",z:"用户分层/细分",x:"Our CRM segmentation is based on purchase frequency and total spend level.",c:"ind",t:"crm"},
+  {id:"w132",e:"retention rate",z:"留存率",x:"Member retention rate is a key KPI for the premium membership programme.",c:"ind",t:"crm"},
+  {id:"w133",e:"churn rate",z:"流失率",x:"Our churn rate increased in Q2 — we need a stronger retention strategy.",c:"ind",t:"crm"},
+  {id:"w134",e:"CLV",z:"用户终身价值",x:"High CLV users should receive priority treatment in our membership programme.",c:"ind",t:"crm"},
+  {id:"w135",e:"NPS",z:"净推荐值",x:"Our NPS of 72 among premium members is above the category average.",c:"ind",t:"crm"},
+  {id:"w136",e:"win-back campaign",z:"用户召回活动",x:"We will run a win-back campaign targeting users who have not purchased in 6 months.",c:"ind",t:"crm"},
+  {id:"w137",e:"onboarding journey",z:"用户引导旅程",x:"A well-designed onboarding journey increases 90-day retention significantly.",c:"ind",t:"crm"},
+  {id:"w138",e:"trigger-based communication",z:"触发式消息推送",x:"Trigger-based communication improves message relevance and reduces churn rate.",c:"ind",t:"crm"},
+  {id:"w139",e:"I\'d recommend we...",z:"我建议我们……（有依据的建议）",x:"I\'d recommend we prioritise brand awareness over conversion this quarter.",c:"expr",t:"meeting"},
+  {id:"w140",e:"I\'m fully aligned on this",z:"我完全同意这个方向",x:"I\'m fully aligned on this approach — let\'s move forward with the plan.",c:"expr",t:"meeting"},
+  {id:"w141",e:"I\'d like to offer a different perspective",z:"我想提供一个不同的视角（委婉不同意）",x:"I\'d like to offer a different perspective on the budget allocation.",c:"expr",t:"meeting"},
+  {id:"w142",e:"The key challenge here is...",z:"这里的关键挑战是……",x:"The key challenge here is the limited brand budget available in Q1.",c:"expr",t:"meeting"},
+  {id:"w143",e:"I\'ll revert by EOD",z:"今天下班前回复你",x:"I\'ll verify the timeline and revert by EOD Thursday.",c:"expr",t:"email"},
+  {id:"w144",e:"I\'d like to walk you through...",z:"我来带您看一下……",x:"I\'d like to walk you through our Q3 brand strategy for China.",c:"expr",t:"meeting"},
+  {id:"w145",e:"Happy to jump on a call",z:"随时可以打电话沟通",x:"Happy to jump on a call to walk you through the campaign rationale.",c:"expr",t:"email"},
+  {id:"w146",e:"We delivered strong results",z:"我们取得了很好的成果",x:"We delivered strong results this quarter — CPE was 50% below benchmark.",c:"expr",t:"meeting"},
+  {id:"w147",e:"Could we get sign-off by...?",z:"能否在……前给我审批确认？",x:"Could we get sign-off on this creative by end of next week?",c:"expr",t:"email"},
+  {id:"w148",e:"Please find attached",z:"请查收附件",x:"Please find attached the updated campaign brief for your review.",c:"expr",t:"email"},
+  {id:"w149",e:"Let me take this offline",z:"这个我们私下再聊",x:"Let me take this offline and come back to you with a detailed answer.",c:"expr",t:"meeting"},
+  {id:"w150",e:"To recap...",z:"总结一下……",x:"To recap — Kiwi will submit the brief by Thursday, compliance reverts by EOD Friday.",c:"expr",t:"meeting"},
+  {id:"w151",e:"I\'ll loop you in",z:"我会把你加进抄送",x:"I\'ll loop you in on the email thread with the Australian compliance team.",c:"expr",t:"email"},
+  {id:"w152",e:"Sorry, I didn\'t quite catch that",z:"抱歉，我没有完全听清楚",x:"Sorry, I didn\'t quite catch that — could you repeat your last point?",c:"expr",t:"meeting"},
+  {id:"w153",e:"Could you advise on...?",z:"请您就……给出建议？",x:"Could you advise on the HQ approval process for China market content?",c:"expr",t:"email"},
+  {id:"w154",e:"Therefore / Thus",z:"因此（因果关系）",x:"The compliance review takes 6 weeks. Therefore, we need to submit by Monday.",c:"logic",t:"connector"},
+  {id:"w155",e:"Nevertheless",z:"尽管如此（坚持转折）",x:"The process was slow. Nevertheless, we delivered the campaign on time.",c:"logic",t:"connector"},
+  {id:"w156",e:"Furthermore / Moreover",z:"此外（递进，同方向）",x:"The campaign drove awareness. Furthermore, it generated significant earned media.",c:"logic",t:"connector"},
+  {id:"w157",e:"On the other hand",z:"另一方面（对比转折）",x:"RedNote delivers strong CPE. On the other hand, Douyin reaches a broader demographic.",c:"logic",t:"connector"},
+  {id:"w158",e:"Although / Despite",z:"虽然/尽管（让步）",x:"Although the budget was limited, we achieved strong results.",c:"logic",t:"connector"},
+  {id:"w159",e:"Whereas",z:"而……则（平行对比）",x:"The China team focuses on RedNote, whereas the SEA team prioritises TikTok.",c:"logic",t:"connector"},
+  {id:"w160",e:"Thereby",z:"由此/从而（手段→结果）",x:"We leveraged KOCs, thereby reducing paid media spend by 30%.",c:"logic",t:"connector"},
+  {id:"w161",e:"Up X% year-on-year (YoY)",z:"同比增长X%",x:"Brand awareness is up 20% year-on-year — we are on a positive trajectory.",c:"data",t:"data"},
+  {id:"w162",e:"Outperformed the benchmark by X%",z:"超越行业均值X%",x:"Our CPE outperformed the industry benchmark by 50%.",c:"data",t:"data"},
+  {id:"w163",e:"Achieved X% of our annual target",z:"完成全年目标X%",x:"We achieved 200% of our annual commercial target.",c:"data",t:"data"},
+  {id:"w164",e:"Budget utilisation rate",z:"预算利用率",x:"Our budget utilisation rate was 92% this quarter — on track with plan.",c:"data",t:"data"},
+  {id:"w165",e:"Down X% month-over-month (MoM)",z:"环比下滑X%",x:"CPE declined 5% month-over-month following the creative refresh.",c:"data",t:"data"},
+  {id:"w166",e:"market entry strategy",z:"市场进入策略",x:"Our market entry strategy for Vietnam prioritises e-commerce over modern trade.",c:"sea",t:"sea"},
+  {id:"w167",e:"first-mover advantage",z:"先发优势",x:"Acting now gives us first-mover advantage in the organic formula category in SEA.",c:"sea",t:"sea"},
+  {id:"w168",e:"pilot market",z:"试点市场",x:"Vietnam will serve as our pilot market before we expand to other SEA countries.",c:"sea",t:"sea"},
+  {id:"w169",e:"glocal approach",z:"全球本土化",x:"Our glocal approach means consistent brand values with locally adapted execution.",c:"sea",t:"sea"},
+  {id:"w170",e:"north star metric",z:"最核心的指标",x:"Our north star metric for brand is top-of-mind awareness among premium parents.",c:"lead",t:"leadership"},
+  {id:"w171",e:"investment case",z:"投资论证",x:"I\'ll build an investment case for the brand budget increase before the board review.",c:"lead",t:"leadership"},
+  {id:"w172",e:"growth lever",z:"增长杠杆",x:"Category education is the most powerful growth lever available to us right now.",c:"lead",t:"leadership"},
+  {id:"w173",e:"scenario planning",z:"情景规划",x:"We should do scenario planning for three different budget levels before committing.",c:"lead",t:"leadership"},
+  {id:"w174",e:"long-term brand vision",z:"品牌长期愿景",x:"Our long-term brand vision is to be synonymous with organic parenting in China.",c:"lead",t:"leadership"},
+  {id:"w175",e:"payback period",z:"回收期",x:"The payback period for brand investment is typically 18-24 months.",c:"lead",t:"leadership"},
+  {id:"w176",e:"P&L impact",z:"损益影响",x:"The CMO needs to demonstrate the P&L impact of brand investment to the CEO.",c:"lead",t:"leadership"},
+  {id:"w177",e:"fulfil",z:"实现/履行（不是填充）",x:"We fulfilled all campaign KPIs ahead of the deadline.",c:"verb",t:"correction"},
+  {id:"w178",e:"efficient",z:"高效的",x:"We need a more efficient process for getting HQ content approval.",c:"adj",t:"correction"},
+  {id:"w179",e:"mutual",z:"相互的/共同的",x:"This is a mutual benefit — the brand gets exposure, we gain content resources.",c:"adj",t:"blank"},
+  {id:"w180",e:"inception",z:"开始/启动",x:"From inception to launch, the campaign took three months to execute.",c:"noun",t:"blank"},
+  {id:"w181",e:"scalability",z:"可扩展性",x:"The scalability of this model is what makes it attractive for SEA markets.",c:"noun",t:"blank"},
+  {id:"w182",e:"turnaround",z:"周转时间",x:"The turnaround for HQ approval is typically 6-8 weeks.",c:"noun",t:"blank"},
+  {id:"w183",e:"rollout",z:"推广/落地",x:"The phased rollout will start in Vietnam before expanding regionally.",c:"noun",t:"blank"},
+  {id:"w184",e:"framework",z:"框架",x:"We need a strategic framework before allocating budget across channels.",c:"noun",t:"blank"},
+  {id:"w185",e:"touchpoint",z:"触点",x:"Every consumer touchpoint should reflect our brand positioning.",c:"noun",t:"blank"},
+  {id:"w186",e:"narrative",z:"叙事/故事线",x:"The brand narrative centres on trust, transparency, and organic integrity.",c:"noun",t:"blank"},
+  {id:"w187",e:"playbook",z:"操作手册",x:"We need a brand playbook that local teams can follow consistently.",c:"noun",t:"blank"},
+  {id:"w188",e:"pipeline",z:"管线/储备",x:"The new product pipeline includes three SKUs launching in H2.",c:"noun",t:"blank"},
+  {id:"w189",e:"ecosystem",z:"生态系统",x:"We need to build a content ecosystem across owned and earned channels.",c:"noun",t:"blank"},
+  {id:"w190",e:"traction",z:"牵引力/进展",x:"The campaign is gaining traction — engagement is up 30% week on week.",c:"noun",t:"blank"},
+  {id:"w191",e:"agenda",z:"议程",x:"Let me share the agenda for today\'s brand strategy session.",c:"biz",t:"meeting"},
+  {id:"w192",e:"action item",z:"行动事项",x:"The key action item from today is to submit the brief by Thursday.",c:"biz",t:"meeting"},
+  {id:"w193",e:"follow-up",z:"跟进",x:"I\'ll send a follow-up email with all the action items from today.",c:"biz",t:"meeting"},
+  {id:"w194",e:"sync",z:"同步会议",x:"Can we schedule a quick sync to align on the campaign direction?",c:"biz",t:"meeting"},
+  {id:"w195",e:"alignment",z:"对齐/一致",x:"I want to ensure full alignment before we move into execution.",c:"biz",t:"meeting"},
+  {id:"w196",e:"bandwidth",z:"资源/精力",x:"I don\'t have the bandwidth to take on another project this quarter.",c:"biz",t:"meeting"},
+  {id:"w197",e:"deliverable",z:"交付物",x:"The key deliverable for this week is the campaign brief.",c:"biz",t:"meeting"},
+  {id:"w198",e:"briefing",z:"简报会",x:"I\'ll schedule a briefing for the full team before the launch.",c:"biz",t:"meeting"},
+  {id:"w199",e:"escalate",z:"升级处理",x:"If the issue isn\'t resolved in 48 hours, we\'ll need to escalate.",c:"biz",t:"meeting"},
+  {id:"w200",e:"loop in",z:"加进抄送/知会",x:"Please loop in the compliance team on this email thread.",c:"biz",t:"email"},
+  {id:"w201",e:"take offline",z:"私下跟进",x:"Let me take this offline and come back to you with more detail.",c:"biz",t:"meeting"},
+  {id:"w202",e:"circle back",z:"回头再议",x:"Let me circle back on that question after I\'ve checked the data.",c:"biz",t:"meeting"},
+  {id:"w203",e:"deep dive",z:"深入分析",x:"Let\'s do a deep dive into the RedNote performance data next week.",c:"biz",t:"meeting"},
+  {id:"w204",e:"ballpark",z:"大概/粗略估计",x:"Can you give me a ballpark figure for the campaign budget?",c:"biz",t:"meeting"},
+  {id:"w205",e:"workstream",z:"工作流/项目线",x:"The brand campaign is one of three workstreams running this quarter.",c:"biz",t:"meeting"},
+  {id:"w206",e:"onboard",z:"入职/引入",x:"We need to onboard two new agency partners before Q3.",c:"biz",t:"meeting"},
+  {id:"w207",e:"cross-functional",z:"跨职能",x:"This is a cross-functional project involving brand, digital, and CRM.",c:"biz",t:"meeting"},
+  {id:"w208",e:"make a decision",z:"做决定（不是do a decision）",x:"We need to make a decision on the budget allocation by Friday.",c:"collocate",t:"collocation"},
+  {id:"w209",e:"conduct research",z:"进行研究（比do research更正式）",x:"We conducted research into organic awareness among premium parents.",c:"collocate",t:"collocation"},
+  {id:"w210",e:"hold a meeting",z:"召开会议（不是do a meeting）",x:"Let\'s hold a quick sync to align on the campaign direction.",c:"collocate",t:"collocation"},
+  {id:"w211",e:"give a presentation",z:"做演示（不是do a presentation）",x:"I\'ll give a presentation on the brand strategy to the CMO on Tuesday.",c:"collocate",t:"collocation"},
+  {id:"w212",e:"raise awareness",z:"提升认知度（不是lift awareness）",x:"This campaign is designed to raise awareness of organic parenting.",c:"collocate",t:"collocation"},
+  {id:"w213",e:"drive growth",z:"推动增长（不是push growth）",x:"The new campaign is designed to drive growth in the organic formula segment.",c:"collocate",t:"collocation"},
+  {id:"w214",e:"meet a deadline",z:"按时完成（不是reach a deadline）",x:"We need to meet the submission deadline for the HQ brand review.",c:"collocate",t:"collocation"},
+  {id:"w215",e:"gain insights",z:"获得洞察（比get insights更专业）",x:"We gained valuable insights from the Mystery Shopper programme.",c:"collocate",t:"collocation"},
+  {id:"w216",e:"deliver results",z:"交付成果（比bring results更专业）",x:"The team consistently delivers strong results under budget pressure.",c:"collocate",t:"collocation"},
+  {id:"w217",e:"tackle a challenge",z:"应对挑战（比fight更专业）",x:"We need to tackle the compliance timeline challenge head on.",c:"collocate",t:"collocation"},
+  {id:"w218",e:"set a benchmark",z:"设定基准（不是make a benchmark）",x:"This campaign will set a new benchmark for organic formula marketing in China.",c:"collocate",t:"collocation"},
+  {id:"w219",e:"run a campaign",z:"执行活动（比do a campaign更专业）",x:"We\'re running three brand campaigns simultaneously this quarter.",c:"collocate",t:"collocation"},
+  {id:"w220",e:"build brand equity",z:"建立品牌资产",x:"Our 12-month goal is to build brand equity among premium parents.",c:"collocate",t:"collocation"},
+  {id:"w221",e:"track performance",z:"追踪表现（比follow performance更专业）",x:"We\'ll track performance against KPIs on a weekly basis.",c:"collocate",t:"collocation"},
+  {id:"w222",e:"achieve a target",z:"达成目标（不是reach a target）",x:"We achieved 200% of our commercial target for the Golden Tree Award project.",c:"collocate",t:"collocation"},
+  {id:"w223",e:"responsible for",z:"对……负责",x:"I\'m responsible for all brand and PR activities in China.",c:"prep",t:"preposition"},
+  {id:"w224",e:"aligned with",z:"与……保持一致",x:"The campaign strategy is fully aligned with our brand positioning.",c:"prep",t:"preposition"},
+  {id:"w225",e:"based on",z:"基于",x:"Based on consumer insights, I\'d recommend we prioritise brand awareness.",c:"prep",t:"preposition"},
+  {id:"w226",e:"compliant with",z:"符合/遵守",x:"All content must be compliant with FSANZ and local regulatory standards.",c:"prep",t:"preposition"},
+  {id:"w227",e:"accountable for",z:"对……负责/承担责任",x:"The brand team is accountable for all consumer-facing communications.",c:"prep",t:"preposition"},
+  {id:"w228",e:"committed to",z:"致力于",x:"We\'re committed to building long-term trust with premium parents.",c:"prep",t:"preposition"},
+  {id:"w229",e:"consistent with",z:"与……一致",x:"All KOL content must be consistent with our brand guidelines.",c:"prep",t:"preposition"},
+  {id:"w230",e:"familiar with",z:"熟悉",x:"I\'m very familiar with the organic formula consumer decision journey.",c:"prep",t:"preposition"},
+  {id:"w231",e:"in line with",z:"符合/按照",x:"The campaign brief is fully in line with global brand standards.",c:"prep",t:"preposition"},
+  {id:"w232",e:"in charge of",z:"负责",x:"I\'m in charge of all brand marketing activities for the China market.",c:"prep",t:"preposition"},
+  {id:"w233",e:"Sorry, could you repeat that?",z:"没听清楚，请再说一遍",x:"Sorry, could you repeat that? I didn\'t quite catch your last point.",c:"phrase",t:"videocall"},
+  {id:"w234",e:"You\'re breaking up",z:"你的声音断断续续",x:"Sorry, you\'re breaking up — could you repeat from where you said...?",c:"phrase",t:"videocall"},
+  {id:"w235",e:"Sorry to jump in",z:"抱歉打断一下",x:"Sorry to jump in, but I\'d like to add something here.",c:"phrase",t:"videocall"},
+  {id:"w236",e:"Just to confirm I understood correctly",z:"确认我理解正确",x:"Just to confirm I understood correctly — you\'re saying we should prioritise Vietnam?",c:"phrase",t:"videocall"},
+  {id:"w237",e:"I\'ll take that on notice",z:"记录下来稍后回复",x:"That\'s a good question — I\'ll take that on notice and come back to you by EOD.",c:"phrase",t:"videocall"},
+  {id:"w238",e:"Across the line",z:"获得通过/审批",x:"We need to get this creative across the line before end of month.",c:"phrase",t:"videocall"},
+  {id:"w239",e:"Cut through",z:"在噪音中突出",x:"The key challenge is creating content that cuts through in a saturated market.",c:"phrase",t:"videocall"},
+  {id:"w240",e:"No worries",z:"没问题（澳洲常用）",x:"No worries — I\'ll send you the updated brief by this afternoon.",c:"phrase",t:"aus"},
+  {id:"w241",e:"Cheers",z:"谢谢（澳洲非正式）",x:"Cheers for sending that over so quickly — really helpful.",c:"phrase",t:"aus"},
+  {id:"w242",e:"Keen",z:"热情的/感兴趣（澳洲口语）",x:"Are you keen to join the Vietnam pilot project team?",c:"phrase",t:"aus"},
+  {id:"w243",e:"Reckon",z:"认为（澳洲口语版think）",x:"I reckon we should prioritise brand awareness before driving conversion.",c:"phrase",t:"aus"},
+  {id:"w244",e:"How do we land this?",z:"这个怎么落地执行？",x:"Great concept — but how do we land this within our current budget?",c:"phrase",t:"aus"},
+  {id:"w245",e:"900 million / 900M",z:"9亿（不是9 hundred million）",x:"The brand generates annual revenue of approximately RMB 900M in China.",c:"data",t:"number"},
+  {id:"w246",e:"78 million / 78M",z:"7800万",x:"The campaign reached 78 million users across RedNote and Douyin.",c:"data",t:"number"},
+  {id:"w247",e:"1 billion / 1B",z:"10亿（不是1 hundred million）",x:"The organic formula category in China is worth approximately RMB 1 billion.",c:"data",t:"number"},
+  {id:"w248",e:"year-on-year (YoY)",z:"同比",x:"Brand awareness is up 20% year-on-year — we\'re on a positive trajectory.",c:"data",t:"data"},
+  {id:"w249",e:"month-over-month (MoM)",z:"月环比",x:"CPE declined 5% month-over-month following the creative refresh.",c:"data",t:"data"},
+  {id:"w250",e:"quarter-on-quarter (QoQ)",z:"季度环比",x:"Revenue grew 12% quarter-on-quarter following the brand campaign launch.",c:"data",t:"data"},
+  {id:"w251",e:"outperformed by X%",z:"超越……X%",x:"Our CPE outperformed the industry benchmark by 50%.",c:"data",t:"data"},
+  {id:"w252",e:"fell short of",z:"未达成",x:"We fell short of our share of voice target by 15% — here\'s our mitigation plan.",c:"data",t:"data"},
+  {id:"w253",e:"tracking ahead of target",z:"超前完成目标",x:"We\'re tracking ahead of target on brand awareness — up 20% vs plan.",c:"data",t:"data"},
+  {id:"w254",e:"tracking behind target",z:"落后于目标",x:"We\'re tracking behind target on conversion — here\'s how we\'ll close the gap.",c:"data",t:"data"},
+  {id:"w255",e:"headline number",z:"最重要的数字",x:"The headline number for Q1 is a 67% improvement in CPE efficiency.",c:"data",t:"data"},
+  {id:"w256",e:"MOQ",z:"最小起订量（Minimum Order Quantity）",x:"The supplier\'s MOQ is 10,000 units — we need to confirm forecast before ordering.",c:"supply",t:"supplier"},
+  {id:"w257",e:"lead time",z:"备货周期",x:"The lead time for organic ingredients from Tasmania is 8-10 weeks.",c:"supply",t:"supplier"},
+  {id:"w258",e:"quality assurance",z:"质量保证",x:"Quality assurance checks are conducted at every stage of the production process.",c:"supply",t:"supplier"},
+  {id:"w259",e:"factory audit",z:"工厂审核",x:"We conduct an annual factory audit to ensure all suppliers meet our organic standards.",c:"supply",t:"supplier"},
+  {id:"w260",e:"COA",z:"检测报告（Certificate of Analysis）",x:"We require a COA for every batch before it can be used in production.",c:"supply",t:"supplier"},
+  {id:"w261",e:"sourcing strategy",z:"采购策略",x:"Our sourcing strategy prioritises certified organic suppliers in Tasmania.",c:"supply",t:"supplier"},
+  {id:"w262",e:"vendor management",z:"供应商管理",x:"Strong vendor management is critical to maintaining our organic supply chain integrity.",c:"supply",t:"supplier"},
+  {id:"w263",e:"procurement",z:"采购",x:"The procurement team works closely with marketing to ensure supply aligns with campaign timelines.",c:"supply",t:"supplier"},
+  {id:"w264",e:"product pipeline",z:"新品管线",x:"The new product pipeline includes three SKUs launching in H2 this year.",c:"npd",t:"npd"},
+  {id:"w265",e:"hero product",z:"明星产品",x:"The Stage 1 formula remains our hero product — it drives 60% of revenue.",c:"npd",t:"npd"},
+  {id:"w266",e:"reformulation",z:"配方升级",x:"The reformulation adds HMO to the Stage 3 formula based on consumer research.",c:"npd",t:"npd"},
+  {id:"w267",e:"ingredient story",z:"成分故事",x:"We need a compelling ingredient story that translates the HMO science into consumer language.",c:"npd",t:"npd"},
+  {id:"w268",e:"soft launch",z:"软上市",x:"We\'ll do a soft launch on RedNote before the full national rollout.",c:"npd",t:"npd"},
+  {id:"w269",e:"hard launch",z:"正式全面上市",x:"The hard launch is planned for Q3 with a full integrated campaign.",c:"npd",t:"npd"},
+  {id:"w270",e:"SKU extension",z:"产品线延伸",x:"The toddler snack range is a natural SKU extension of our organic baby food portfolio.",c:"npd",t:"npd"},
+  {id:"w271",e:"claim substantiation",z:"宣称依据验证",x:"All health claims must go through claim substantiation before appearing in any marketing.",c:"npd",t:"npd"},
+  {id:"w272",e:"consolidate",z:"整合/巩固",x:"We need to consolidate our brand messaging across all markets.",c:"verb",t:"blank"},
+  {id:"w273",e:"validate",z:"验证/确认",x:"Let\'s validate this hypothesis with consumer research before committing budget.",c:"verb",t:"blank"},
+  {id:"w274",e:"streamline",z:"简化/使更高效",x:"We need to streamline the approval process to reduce turnaround time.",c:"verb",t:"blank"},
+  {id:"w275",e:"mitigate",z:"缓解/减轻",x:"What\'s our plan to mitigate the risk of the delayed HQ approval?",c:"verb",t:"blank"},
+  {id:"w276",e:"amplify",z:"放大/扩大影响",x:"Whitelisting top KOL posts will amplify our organic reach significantly.",c:"verb",t:"blank"},
+  {id:"w277",e:"elevate",z:"提升/使更高端",x:"Our goal is to elevate the brand perception among premium consumers.",c:"verb",t:"blank"},
+  {id:"w278",e:"align",z:"对齐/保持一致",x:"We need to align with the digital team on the content calendar.",c:"verb",t:"blank"},
+  {id:"w279",e:"brief",z:"向……简报",x:"I\'ll brief the KOL team on the new brand guidelines before seeding starts.",c:"verb",t:"blank"},
+  {id:"w280",e:"iterate",z:"迭代/反复优化",x:"We\'ll iterate on the creative based on the first wave of seeding results.",c:"verb",t:"blank"},
+  {id:"w281",e:"localize",z:"本土化",x:"All global brand assets need to be localized for the Chinese market.",c:"verb",t:"blank"},
+  {id:"w282",e:"substantiate",z:"为……提供依据",x:"We must substantiate every health claim before including it in marketing materials.",c:"verb",t:"blank"},
+  {id:"w283",e:"cascade",z:"逐级传达",x:"The new brand guidelines will be cascaded to all team members this week.",c:"verb",t:"blank"},
+  {id:"w284",e:"spearhead",z:"主导/带头",x:"Kiwi will spearhead the brand strategy development for Q3.",c:"verb",t:"blank"},
+  {id:"w285",e:"quantify",z:"量化",x:"We need to quantify the brand equity impact of this campaign.",c:"verb",t:"blank"},
+  {id:"w286",e:"articulate",z:"清晰表达",x:"Can you articulate the key message in one sentence for the consumer?",c:"verb",t:"blank"},
+  {id:"w287",e:"operationalize",z:"使可执行/落地",x:"We need to operationalize the brand strategy into a quarterly action plan.",c:"verb",t:"blank"},
+  {id:"w288",e:"insight",z:"洞察",x:"The key insight from our research is that premium moms prioritise trust over price.",c:"noun",t:"blank"},
+  {id:"w289",e:"proposition",z:"价值主张",x:"Our brand proposition is organic integrity from farm to shelf.",c:"noun",t:"blank"},
+  {id:"w290",e:"positioning",z:"定位",x:"Our positioning as the premium organic formula brand must be consistent.",c:"noun",t:"blank"},
+  {id:"w291",e:"competitor",z:"竞争对手",x:"Our main competitors in the organic formula space are a2 and Aptamil.",c:"noun",t:"blank"},
+  {id:"w292",e:"market share",z:"市场份额",x:"Our goal is to grow market share by 2% in the organic formula category.",c:"noun",t:"blank"},
+  {id:"w293",e:"target audience",z:"目标受众",x:"Our target audience is high-net-worth mothers aged 25-35 in tier 1 cities.",c:"noun",t:"blank"},
+  {id:"w294",e:"consumer journey",z:"消费者旅程",x:"We need to map the full consumer journey from awareness to repeat purchase.",c:"noun",t:"blank"},
+  {id:"w295",e:"purchase funnel",z:"购买漏斗",x:"We need to optimise the full purchase funnel from awareness to conversion.",c:"noun",t:"blank"},
+  {id:"w296",e:"pain point",z:"痛点",x:"The key pain point for premium moms is uncertainty about product safety.",c:"noun",t:"blank"},
+  {id:"w297",e:"whitespace",z:"市场空白",x:"There\'s a clear whitespace in the market for organic complementary feeding.",c:"noun",t:"blank"},
+  {id:"w298",e:"proof point",z:"佐证",x:"Traceability is our strongest proof point for the organic integrity claim.",c:"noun",t:"blank"},
+  {id:"w299",e:"content pillar",z:"内容支柱",x:"We have three content pillars: organic education, traceability, and community.",c:"noun",t:"blank"},
+  {id:"w300",e:"channel strategy",z:"渠道策略",x:"Our channel strategy prioritises RedNote for awareness and Tmall for conversion.",c:"noun",t:"blank"},
+  {id:"w301",e:"creative direction",z:"创意方向",x:"The creative direction for Q3 centres on the theme of transparent sourcing.",c:"noun",t:"blank"},
+  {id:"w302",e:"media budget",z:"媒体预算",x:"The media budget for Q3 is split 60% paid seeding and 40% owned channel.",c:"noun",t:"blank"},
+  {id:"w303",e:"launch plan",z:"上市计划",x:"The launch plan covers pre-launch seeding, launch day activation, and post-launch tracking.",c:"noun",t:"blank"},
+  {id:"w304",e:"post-mortem",z:"复盘",x:"Let\'s schedule a post-mortem two weeks after the campaign ends.",c:"noun",t:"blank"},
+  {id:"w305",e:"hypothesis",z:"假设",x:"Our hypothesis is that category education content will outperform product-led content.",c:"noun",t:"blank"},
+  {id:"w306",e:"implication",z:"影响/启示",x:"The key implication of this data is that we need to invest more in brand awareness.",c:"noun",t:"blank"},
+  {id:"w307",e:"rationale",z:"理由/依据",x:"The rationale behind this campaign approach is rooted in consumer insight data.",c:"noun",t:"blank"},
+  {id:"w308",e:"robust",z:"强健的/有力的",x:"We need a robust content strategy to support the brand launch.",c:"adj",t:"blank"},
+  {id:"w309",e:"tangible",z:"有形的/实质性的",x:"We need to show tangible results from the brand investment within 6 months.",c:"adj",t:"blank"},
+  {id:"w310",e:"coherent",z:"连贯的/一致的",x:"The brand narrative must be coherent across all consumer touchpoints.",c:"adj",t:"blank"},
+  {id:"w311",e:"incremental",z:"增量的/递进的",x:"Each campaign builds incremental brand equity over time.",c:"adj",t:"blank"},
+  {id:"w312",e:"compelling",z:"有说服力的/引人注目的",x:"We need a compelling brand story that resonates with premium parents.",c:"adj",t:"blank"},
+  {id:"w313",e:"distinctive",z:"独特的/有辨识度的",x:"Our Tasmanian origin story is our most distinctive brand asset.",c:"adj",t:"blank"},
+  {id:"w314",e:"measurable",z:"可衡量的",x:"All campaign objectives must be specific and measurable.",c:"adj",t:"blank"},
+  {id:"w315",e:"actionable",z:"可执行的",x:"The consumer insight must be actionable — it needs to inform our campaign strategy.",c:"adj",t:"blank"},
+  {id:"w316",e:"data-driven",z:"数据驱动的",x:"Our approach to KOL selection is fully data-driven, using Pugongying metrics.",c:"adj",t:"blank"},
+  {id:"w317",e:"premium",z:"高端的/优质的",x:"Bellamy\'s is positioned as a premium organic formula brand.",c:"adj",t:"blank"},
+  {id:"w318",e:"authentic",z:"真实的/有authenticity的",x:"Authentic user stories are more persuasive than scripted testimonials.",c:"adj",t:"blank"},
+  {id:"w319",e:"proactive",z:"主动的",x:"We need to be proactive about managing the HQ approval timeline.",c:"adj",t:"blank"},
+  {id:"w320",e:"reactive",z:"被动的",x:"A reactive approach to compliance issues will slow down our campaign execution.",c:"adj",t:"blank"},
+  {id:"w321",e:"consumer insight",z:"消费者洞察",x:"The key consumer insight driving this campaign is the growing distrust of synthetic ingredients.",c:"ind",t:"brand"},
+  {id:"w322",e:"brand architecture",z:"品牌架构",x:"We need to define the brand architecture before launching the new SKU range.",c:"ind",t:"brand"},
+  {id:"w323",e:"brand guidelines",z:"品牌规范手册",x:"All KOL content must comply with the official brand guidelines.",c:"ind",t:"brand"},
+  {id:"w324",e:"brand consistency",z:"品牌一致性",x:"Brand consistency across all touchpoints is non-negotiable.",c:"ind",t:"brand"},
+  {id:"w325",e:"brand purpose",z:"品牌使命",x:"Our brand purpose is to give every baby the purest possible start in life.",c:"ind",t:"brand"},
+  {id:"w326",e:"brand promise",z:"品牌承诺",x:"Our brand promise is full-chain organic integrity, from farm to shelf.",c:"ind",t:"brand"},
+  {id:"w327",e:"owned media",z:"自有媒体",x:"Our owned media channels include the official RedNote account and WeChat.",c:"ind",t:"digital"},
+  {id:"w328",e:"paid media",z:"付费媒体",x:"The paid media budget covers KOL seeding and RedNote search ads.",c:"ind",t:"digital"},
+  {id:"w329",e:"social commerce",z:"社交电商",x:"TikTok Shop is the dominant social commerce platform in Southeast Asia.",c:"ind",t:"digital"},
+  {id:"w330",e:"influencer marketing",z:"达人营销",x:"Our influencer marketing strategy focuses on credible parenting KOLs.",c:"ind",t:"digital"},
+  {id:"w331",e:"content marketing",z:"内容营销",x:"Content marketing is our primary tool for building organic awareness.",c:"ind",t:"digital"},
+  {id:"w332",e:"performance marketing",z:"效果营销",x:"We balance brand building with performance marketing to drive both awareness and conversion.",c:"ind",t:"digital"},
+  {id:"w333",e:"user-generated content",z:"用户生成内容（UGC）",x:"Strong UGC is the best proof point for authentic brand advocacy.",c:"ind",t:"digital"},
+  {id:"w334",e:"revenue",z:"营收",x:"The brand generates annual revenue of approximately RMB 900M in China.",c:"fin",t:"finance"},
+  {id:"w335",e:"profit margin",z:"利润率",x:"A higher profit margin on premium organic products justifies the brand investment.",c:"fin",t:"finance"},
+  {id:"w336",e:"P&L",z:"损益表",x:"The CMO needs to demonstrate the P&L impact of brand investment to the CEO.",c:"fin",t:"finance"},
+  {id:"w337",e:"EBITDA",z:"息税折旧摊销前利润",x:"The brand\'s EBITDA improved following the successful market repositioning.",c:"fin",t:"finance"},
+  {id:"w338",e:"COGS",z:"销货成本（Cost of Goods Sold）",x:"Higher COGS for organic ingredients is offset by the premium pricing strategy.",c:"fin",t:"finance"},
+  {id:"w339",e:"budget variance",z:"预算差异",x:"The budget variance was minimal — we came in 3% under plan for Q2.",c:"fin",t:"finance"},
+  {id:"w340",e:"fiscal year",z:"财政年度",x:"Our fiscal year runs from January to December.",c:"fin",t:"finance"},
+  {id:"w341",e:"headcount",z:"人员编制",x:"We need to increase headcount in the brand team to support the SEA expansion.",c:"fin",t:"finance"},
+  {id:"w342",e:"opex",z:"运营支出",x:"The brand campaign is classified as opex, not capex.",c:"fin",t:"finance"},
+  {id:"w343",e:"assess",z:"评估/评价",x:"We need to assess the competitive landscape before finalising our brand strategy.",c:"verb",t:"blank"},
+  {id:"w344",e:"forecast",z:"预测",x:"Can you forecast the campaign reach based on last quarter\'s KOL performance?",c:"verb",t:"blank"},
+  {id:"w345",e:"refine",z:"优化/精炼",x:"Let\'s refine the brand message based on the consumer testing results.",c:"verb",t:"blank"},
+  {id:"w346",e:"scale",z:"规模化/扩大",x:"Once we validate the approach in China, we can scale it to SEA markets.",c:"verb",t:"blank"},
+  {id:"w347",e:"negotiate",z:"谈判/协商",x:"I negotiated a 20% fee reduction with the top-tier KOL for a long-term partnership.",c:"verb",t:"blank"},
+  {id:"w348",e:"deploy",z:"部署/投放",x:"We\'ll deploy the full campaign budget in Q3 to maximise the launch impact.",c:"verb",t:"blank"},
+  {id:"w349",e:"capture",z:"捕获/获取",x:"We need to capture the attention of premium moms at the consideration stage.",c:"verb",t:"blank"},
+  {id:"w350",e:"retain",z:"留住/保留",x:"Our goal is to retain 80% of our premium members beyond the first year.",c:"verb",t:"blank"},
+  {id:"w351",e:"convert",z:"转化",x:"The challenge is to convert brand awareness into trial and repeat purchase.",c:"verb",t:"blank"},
+  {id:"w352",e:"activate",z:"激活/发起",x:"We\'ll activate the campaign across owned, paid, and earned channels simultaneously.",c:"verb",t:"blank"},
+  {id:"w353",e:"drive",z:"推动/驱动",x:"Category education content is designed to drive organic consideration.",c:"verb",t:"blank"},
+  {id:"w354",e:"build",z:"建立/构建",x:"Our 12-month priority is to build brand salience among premium parents.",c:"verb",t:"blank"},
+  {id:"w355",e:"protect",z:"保护",x:"We need to protect our market position as the #1 organic formula brand.",c:"verb",t:"blank"},
+  {id:"w356",e:"expand",z:"扩大/拓展",x:"We plan to expand our distribution into Southeast Asian markets in H2.",c:"verb",t:"blank"},
+  {id:"w357",e:"launch",z:"上市/推出",x:"We\'ll launch the new SKU with a full integrated campaign in Q3.",c:"verb",t:"blank"},
+  {id:"w358",e:"test",z:"测试",x:"Let\'s test two creative directions before committing the full budget.",c:"verb",t:"blank"},
+  {id:"w359",e:"track",z:"追踪",x:"We\'ll track campaign performance against KPIs on a weekly basis.",c:"verb",t:"blank"},
+  {id:"w360",e:"report",z:"汇报/报告",x:"I\'ll report on the Q2 brand metrics at the monthly leadership review.",c:"verb",t:"blank"},
+  {id:"w361",e:"present",z:"汇报/展示",x:"I\'ll present the brand strategy to the CMO and CEO next Tuesday.",c:"verb",t:"blank"},
+  {id:"w362",e:"collaborate",z:"合作",x:"We need to collaborate with the digital team to align on campaign timing.",c:"verb",t:"blank"},
+  {id:"w363",e:"cost-effective",z:"性价比高的",x:"The KOC programme is the most cost-effective channel we have.",c:"adj",t:"blank"},
+  {id:"w364",e:"time-sensitive",z:"时间紧迫的",x:"This approval is time-sensitive — we need a response by Friday.",c:"adj",t:"blank"},
+  {id:"w365",e:"high-priority",z:"高优先级的",x:"The HQ approval is a high-priority item for this week.",c:"adj",t:"blank"},
+  {id:"w366",e:"long-term",z:"长期的",x:"Brand equity is a long-term investment that pays back over 18-24 months.",c:"adj",t:"blank"},
+  {id:"w367",e:"short-term",z:"短期的",x:"We need short-term conversion results alongside the long-term brand investment.",c:"adj",t:"blank"},
+  {id:"w368",e:"consumer-centric",z:"以消费者为中心的",x:"Our approach is consumer-centric — we start with insight and work backwards.",c:"adj",t:"blank"},
+  {id:"w369",e:"results-driven",z:"结果导向的",x:"I\'m results-driven and always connect brand activity to measurable outcomes.",c:"adj",t:"blank"},
+  {id:"w370",e:"insight-led",z:"洞察驱动的",x:"Our campaign strategy is insight-led, based on six months of consumer research.",c:"adj",t:"blank"},
+  {id:"w371",e:"evidence-based",z:"有据可依的",x:"All product claims must be evidence-based and cleared by compliance.",c:"adj",t:"blank"},
+  {id:"w372",e:"risk-averse",z:"风险规避的",x:"The Australian compliance team is risk-averse — build in extra review time.",c:"adj",t:"blank"},
+  {id:"w373",e:"efficacy",z:"功效/有效性",x:"The formula\'s efficacy in supporting infant gut health is well-documented.",c:"noun",t:"blank"},
+  {id:"w374",e:"transparency",z:"透明度",x:"Transparency about our supply chain is central to our brand positioning.",c:"noun",t:"blank"},
+  {id:"w375",e:"credibility",z:"可信度",x:"Third-party certifications strengthen our credibility with sceptical consumers.",c:"noun",t:"blank"},
+  {id:"w376",e:"awareness",z:"认知度",x:"Our primary goal is to build brand awareness among premium parents.",c:"noun",t:"blank"},
+  {id:"w377",e:"consideration",z:"考虑度",x:"We need to move consumers from awareness to consideration of our brand.",c:"noun",t:"blank"},
+  {id:"w378",e:"trial",z:"试用/首次购买",x:"Driving trial is the key challenge for new product SKUs in the first quarter.",c:"noun",t:"blank"},
+  {id:"w379",e:"loyalty",z:"忠诚度",x:"Premium membership programmes are designed to build long-term brand loyalty.",c:"noun",t:"blank"},
+  {id:"w380",e:"advocacy",z:"口碑传播",x:"Strong product advocacy from trusted KOCs is our most powerful growth lever.",c:"noun",t:"blank"},
+  {id:"w381",e:"perception",z:"认知/印象",x:"Consumer perception of organic formula is shifting from niche to mainstream.",c:"noun",t:"blank"},
+  {id:"w382",e:"trust",z:"信任",x:"Trust is the most important currency for premium baby food brands.",c:"noun",t:"blank"},
+  {id:"w383",e:"differentiation",z:"差异化",x:"Our differentiation strategy centres on traceability and organic integrity.",c:"noun",t:"blank"},
+  {id:"w384",e:"execution",z:"执行",x:"Strong strategic thinking means nothing without flawless execution.",c:"noun",t:"blank"},
+  {id:"w385",e:"impact",z:"影响/冲击",x:"We need to demonstrate the brand impact of our investment to leadership.",c:"noun",t:"blank"},
+  {id:"w386",e:"outcome",z:"结果/成果",x:"The desired outcome of this campaign is a 20% increase in brand consideration.",c:"noun",t:"blank"},
+  {id:"w387",e:"objective",z:"目标",x:"Our primary objective for Q3 is to build top-of-mind awareness in tier 1 cities.",c:"noun",t:"blank"},
+  {id:"w388",e:"initiative",z:"举措/项目",x:"The organic parenting education initiative will launch across RedNote in Q3.",c:"noun",t:"blank"},
+  {id:"w389",e:"approach",z:"方法/方式",x:"Our integrated approach combines brand building with performance marketing.",c:"noun",t:"blank"},
+  {id:"w390",e:"strategy",z:"策略",x:"The brand strategy centres on consumer education and supply chain transparency.",c:"noun",t:"blank"},
+  {id:"w391",e:"tactic",z:"战术/具体手段",x:"The key tactics include KOL seeding, search optimisation, and owned channel content.",c:"noun",t:"blank"},
+  {id:"w392",e:"priority",z:"优先级",x:"Brand awareness is our top priority for the first 90 days.",c:"noun",t:"blank"},
+  {id:"w393",e:"I\'d like to propose...",z:"我想提议……",x:"I\'d like to propose we run an A/B test before committing the full budget.",c:"expr",t:"meeting"},
+  {id:"w394",e:"My recommendation is...",z:"我的建议是……",x:"My recommendation is to prioritise brand awareness over conversion in Q1.",c:"expr",t:"meeting"},
+  {id:"w395",e:"The data shows...",z:"数据显示……",x:"The data shows a significant improvement in brand awareness following the campaign.",c:"expr",t:"meeting"},
+  {id:"w396",e:"In my view...",z:"我认为……",x:"In my view, the biggest opportunity is in the sensitive baby segment.",c:"expr",t:"meeting"},
+  {id:"w397",e:"That said...",z:"话虽如此……",x:"The budget is tight. That said, I believe we can achieve strong results with smart allocation.",c:"expr",t:"meeting"},
+  {id:"w398",e:"With that in mind...",z:"考虑到这一点……",x:"With that in mind, I\'d recommend we focus on RedNote as our primary channel.",c:"expr",t:"meeting"},
+  {id:"w399",e:"At the end of the day...",z:"归根结底……",x:"At the end of the day, consumer trust is what drives purchase decisions.",c:"expr",t:"meeting"},
+  {id:"w400",e:"Going forward...",z:"展望未来/今后……",x:"Going forward, I\'d recommend a monthly brand health tracking report.",c:"expr",t:"meeting"},
+  {id:"w401",e:"To be honest...",z:"坦率地说……",x:"To be honest, the compliance timeline is our biggest risk for this campaign.",c:"expr",t:"meeting"},
+  {id:"w402",e:"I\'d push back on that...",z:"我对这个有不同意见……",x:"I\'d push back on that — I don\'t think reducing the brand budget is the right call.",c:"expr",t:"meeting"},
+  {id:"w403",e:"Let\'s park that...",z:"先把这个放一放……",x:"Let\'s park that discussion for now and circle back after the data is in.",c:"expr",t:"meeting"},
+  {id:"w404",e:"Can we take a step back?",z:"我们能退一步看吗？",x:"Can we take a step back and revisit the core objective before going deeper?",c:"expr",t:"meeting"},
+  {id:"w405",e:"What\'s the ask here?",z:"你的具体要求是什么？",x:"What\'s the ask here — do you need a full brief or just a headline strategy?",c:"expr",t:"meeting"},
+  {id:"w406",e:"I\'ll own that...",z:"这个我来负责……",x:"I\'ll own the brand strategy development and present it to the CMO next week.",c:"expr",t:"meeting"},
+  {id:"w407",e:"Let\'s align on...",z:"让我们在……上对齐",x:"Let\'s align on the campaign objectives before briefing the creative team.",c:"expr",t:"meeting"}
+];
+
+const WP=[
+  {w:["leverage","optimize","benchmark"],cn:"描述你的小红书投放策略",ref:"We can leverage our KOC network to optimize the seeding strategy, achieving a CPE well below the industry benchmark."},
+  {w:["demonstrate","consistent","brand equity"],cn:"描述品牌建设的核心原则",ref:"A consistent brand presence across all touchpoints demonstrates our commitment to building long-term brand equity."},
+  {w:["coordinate","compliance","sign-off"],cn:"描述内容发布前的审批流程",ref:"I'll coordinate with the compliance team to obtain sign-off before any content goes live."},
+  {w:["prioritize","stakeholder","mandate"],cn:"向CEO说明你的工作重点",ref:"Our mandate is to build brand equity in China, so I'd prioritize brand awareness campaigns and align all key stakeholders on this direction."},
+  {w:["anticipate","significant","momentum"],cn:"汇报活动预期成果",ref:"We anticipate significant brand lift from this campaign, which will build momentum for our Q3 launch."},
+  {w:["integrate","holistic","attribution"],cn:"解释整合营销的价值",ref:"A holistic approach that integrates paid, owned, and earned media allows for accurate attribution across the full consumer journey."},
+  {w:["penetration","headroom","category education"],cn:"分析有机奶粉在中国的市场机会",ref:"With market penetration still below 5%, there's significant headroom for growth — category education is our most powerful lever."},
+  {w:["execute","trajectory","outperform"],cn:"向CMO汇报季度品牌表现",ref:"We executed the campaign on time and on budget. The brand is on a positive trajectory, and we continue to outperform the industry benchmark on CPE."},
+  {w:["brand salience","top-of-mind awareness","earned media"],cn:"说明品牌建设活动的价值",ref:"Investing in brand salience now means consumers will think of us first. Our earned media coverage is already helping to build top-of-mind awareness organically."},
+  {w:["differentiation","credibility","authentic"],cn:"解释贝拉米的竞争优势",ref:"Our differentiation lies in authentic supply chain transparency. This credibility is something no domestic brand can replicate."},
+];
+
+const SPEAK_SCENES=[
+  {id:"cmo",l:"CMO",d:"汇报品牌策略",qa:[
+    {q:"Walk me through your first 90-day brand priorities.",a:"I'd like to prioritize three things: first, establish a consistent brand presence on RedNote through always-on seeding; second, conduct consumer insights research to understand how our target users currently perceive the brand; third, align with the digital team on a campaign calendar. The goal is to build brand salience while driving measurable engagement."},
+    {q:"How would you justify increasing the brand marketing budget?",a:"The investment case is built on long-term brand equity. Our CPE currently outperforms the industry benchmark by 50%, which demonstrates we can deliver efficient results. Increasing the budget would allow us to scale what's already working and accelerate top-of-mind awareness among premium parents."},
+    {q:"What's your view on the organic formula category opportunity in China?",a:"Market penetration is still below 5%, which means there's significant headroom for growth. The key lever is category education — many premium parents have heard of organic formula but don't fully understand why it matters. If we lead that education, we naturally become the most trusted brand in the category."},
+    {q:"How would you differentiate our brand from competitors?",a:"Our key differentiator is supply chain traceability — full-chain organic sourcing from Tasmania, which no domestic brand can replicate. I'd build our brand narrative around transparency and trust, letting consumers see exactly where the product comes from. That authenticity is what premium, rational consumers respond to."},
+  ]},
+  {id:"ceo",l:"CEO / 集团",d:"战略汇报",qa:[
+    {q:"What are the headline brand metrics from last quarter?",a:"Brand awareness among our target demographic is up 20% year-on-year. Our CPE outperformed the industry benchmark by 50%, and we delivered 200% of our commercial target for the Golden Tree Award project. The brand is on a positive trajectory."},
+    {q:"What's your investment case for brand marketing?",a:"Brand equity is a long-term asset. Every dollar we invest in awareness today reduces our customer acquisition cost tomorrow. The payback period for brand investment is typically 18-24 months, but the compounding effect on loyalty and advocacy makes it the highest-ROI channel over a 3-year horizon."},
+    {q:"How does the China brand strategy connect to our SEA expansion?",a:"China is our proof of concept. The brand assets, messaging framework, and consumer education approach we build here can be adapted for Vietnam and other SEA markets with minimal incremental investment. A glocal approach — consistent brand values, locally adapted execution — is the most efficient path to regional growth."},
+  ]},
+  {id:"hq",l:"澳洲总部",d:"合规和审批沟通",qa:[
+    {q:"What content do you need approved, and what's your timeline?",a:"We have a RedNote campaign launching in six weeks. I need approval on three types of content: product benefit claims about HMO and DHA, supply chain traceability messaging, and the overall campaign creative. Could we target a four-week turnaround to give us buffer time?"},
+    {q:"What substantiation do you have for the HMO claim?",a:"We have the product formulation data and the relevant research on HMO as a prebiotic. I'll prepare a full substantiation document for your review. Could you advise on the specific format or evidence standard you need so I can make sure we meet your requirements?"},
+    {q:"The standard review timeline is eight weeks. How do you want to handle that?",a:"I understand — compliance is non-negotiable and I wouldn't want to rush anything that could create risk. Could we explore an expedited review for the priority items, specifically the product claims? In parallel, I'll start executing the elements that don't require sign-off so we maintain momentum."},
+  ]},
+  {id:"digital",l:"Digital Director",d:"跨部门协作",qa:[
+    {q:"What do you need from my team?",a:"I'd like to propose we co-own the Q3 campaign — brand leads the creative strategy and messaging, and your team leads the seeding execution and optimisation. I'd want to align on the content brief together so the KOL messaging is consistent with the brand direction. Does that work for you?"},
+    {q:"We already have a seeding calendar set. How does this fit in?",a:"I'd love to see the calendar — I want to make sure the brand campaign amplifies what you're already doing rather than creating conflict. Could we find 30 minutes to align? I think if we coordinate the tentpole moments, we can get significantly more impact from the same budget."},
+    {q:"What's your view on our current CPE performance?",a:"The CPE data looks strong — outperforming benchmark by 50% is a really solid result. My question is whether we can build on that efficiency by integrating brand storytelling into the seeding content, not just product features. I think that's where we can really differentiate."},
+  ]},
+  {id:"crm",l:"CRM 同事",d:"用户运营联动",qa:[
+    {q:"How do you want to use the CRM data?",a:"Two ways. First, for campaign targeting — I'd love to understand the segmentation so we can tailor brand messaging to different user cohorts. Second, for post-campaign analysis — can we track whether brand campaign exposure correlates with higher retention rates or CLV among exposed users?"},
+    {q:"Our churn rate increased last quarter. Any thoughts from the brand side?",a:"From a brand perspective, churn often signals a trust or value perception issue. I'd suggest we look at whether lapsed users had lower brand engagement before churning. A win-back campaign with a strong brand narrative might be more effective than a promotional offer alone."},
+  ]},
+  {id:"npd",l:"NPD 团队",d:"新品上市对齐",qa:[
+    {q:"What does the marketing team need to know about the new product?",a:"I need three things: the hero benefit we can lead with in consumer-facing content, what claims are fully substantiated and approved, and the key ingredient story — specifically how we translate the technical benefits into language a premium mom will connect with."},
+    {q:"We have new research on HMO levels. Can we use that in marketing?",a:"That sounds powerful. Before I build it into the campaign, can you share the research and confirm it's been through compliance review? I want to make sure any claim we make is fully substantiated. Once cleared, I think we can build a very compelling content series around it."},
+  ]},
+  {id:"supplier",l:"供应商",d:"供应链沟通",qa:[
+    {q:"What kind of supply chain content do you want to create?",a:"We want to build a traceability story that takes consumers on a journey from the Tasmanian farm to the finished product. This could include farm visit content, certification documentation, and a QR code on-pack that links to the full supply chain story. Does that align with what you're able to share?"},
+    {q:"What can we publicly claim about our organic certification?",a:"Could you walk me through exactly what the FSANZ certification covers and what specific claims are substantiated? I want to make sure everything we say in marketing is accurate and approved. If you can provide the COA and certification documents, I'll work with our compliance team to determine what we can use."},
+  ]},
+];
+
+const TC={correction:"py",blank:"pb",brand:"pt",digital:"pt",compliance:"pr",fmcg:"pp",formula:"pg",crm:"pt",npd:"pg",supplier:"pn",meeting:"pb",email:"pt",connector:"pp",data:"pg",number:"py",preposition:"pn",collocation:"pn",videocall:"pb",aus:"py",sea:"pt",leadership:"pp",finance:"pn"};
+const CL={verb:"动词",adj:"形容词",noun:"名词",ind:"行业词",expr:"句式",logic:"逻辑词",modal:"情态动词",data:"数据表达",phrase:"口语短语",biz:"职场词",collocate:"搭配",prep:"介词",fin:"财务词",sea:"市场词",lead:"领导力"};
+
+// ── STATE ────────────────────────────────────────────────────────
+let S={
+  tab:"today",
+  cards:{},streak:0,lastDate:"",
+  // settings
+  newPerDay:10,quizCount:10,writeCount:3,
+  // today task state
+  todayDate:"",taskFlash:false,taskQuiz:false,taskWrite:false,
+  // flash
+  ff:"all",fi:0,flip:false,
+  // quiz
+  qq:null,qi:0,qs:null,qsc:0,qdone:false,
+  // write
+  wi:0,wt:"",wshow:false,wdone:0,
+  // speak
+  sr:null,sm:[],si:"",sl:false,sqi:0,sshow:false,_si:0,
+  // settings panel
+  showSettings:false,
+};
+
+try{
+  const d=JSON.parse(localStorage.getItem("kw5")||"{}");
+  S.cards=d.c||{};S.streak=d.s||0;S.lastDate=d.d||"";
+  S.newPerDay=d.npd||10;S.quizCount=d.qc||10;S.writeCount=d.wc||3;
+  S.todayDate=d.td||"";S.taskFlash=d.tf||false;S.taskQuiz=d.tq||false;S.taskWrite=d.tw||false;
+  // reset daily tasks if new day
+  const today=new Date().toDateString();
+  if(S.todayDate!==today){S.taskFlash=false;S.taskQuiz=false;S.taskWrite=false;S.todayDate=today;}
+}catch{}
+
+function sv(){
+  try{localStorage.setItem("kw5",JSON.stringify({
+    c:S.cards,s:S.streak,d:S.lastDate,
+    npd:S.newPerDay,qc:S.quizCount,wc:S.writeCount,
+    td:S.todayDate,tf:S.taskFlash,tq:S.taskQuiz,tw:S.taskWrite,
+  }));}catch{}
+}
+
+function markStreak(){
+  const today=new Date().toDateString();
+  if(S.lastDate!==today){
+    S.streak=S.lastDate===new Date(Date.now()-86400000).toDateString()?S.streak+1:1;
+    S.lastDate=today;
+  }
+}
+
+// ── VOCAB HELPERS ────────────────────────────────────────────────
+function getNewWords(){
+  const unseen=V.filter(v=>!S.cards[v.id]);
+  return unseen.slice(0,S.newPerDay);
+}
+function getReviewWords(){
+  return V.filter(v=>S.cards[v.id]==="u");
+}
+function getFlashWords(){
+  if(S.ff==="all")return V;
+  if(S.ff==="review")return V.filter(v=>S.cards[v.id]==="u"||!S.cards[v.id]);
+  if(S.ff==="new")return V.filter(v=>!S.cards[v.id]);
+  return V.filter(v=>v.c===S.ff||v.t===S.ff);
+}
+function buildQ(count){
+  const pool=[...V].sort(()=>Math.random()-.5).slice(0,count);
+  return pool.map(v=>({
+    v,opts:[...V.filter(x=>x.id!==v.id).sort(()=>Math.random()-.5).slice(0,3),v].sort(()=>Math.random()-.5),c:v.id
+  }));
+}
+
+// ── NAV ──────────────────────────────────────────────────────────
+function go(t){
+  S.tab=t;
+  document.querySelectorAll(".ni").forEach(n=>n.style.color=n.dataset.t===t?"var(--blue)":"var(--text3)");
+  draw();window.scrollTo(0,0);
+}
+
+function p(text,cls){return`<span class="pill ${cls||""}">${text}</span>`;}
+
+// ── SPEAK ────────────────────────────────────────────────────────
+function speak(text){
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-GB";u.rate=1.0;u.pitch=1;
+  const voices=window.speechSynthesis.getVoices();
+  const gb=voices.find(v=>v.lang==="en-GB"&&v.localService)||voices.find(v=>v.lang==="en-GB")||voices.find(v=>v.lang.startsWith("en"));
+  if(gb)u.voice=gb;
+  window.speechSynthesis.speak(u);
+}
+function speakEx(btn){speak(btn.getAttribute("data-ex"));}
+
+// ── MARK CARD ────────────────────────────────────────────────────
+function mk(id,st){
+  S.cards[id]=st;markStreak();sv();S.flip=false;S.fi++;draw();
+}
+
+// ── TODAY ────────────────────────────────────────────────────────
+function drawToday(){
+  const newW=getNewWords(),revW=getReviewWords();
+  const done=[S.taskFlash,S.taskQuiz,S.taskWrite].filter(Boolean).length;
+  const total=3;
+  const pct=Math.round((done/total)*100);
+  const allDone=done===total;
+  const mastered=Object.values(S.cards).filter(x=>x==="k").length;
+  const today=new Date();
+  const dateStr=`${today.getMonth()+1}月${today.getDate()}日`;
+
+  return`<div class="pad">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+      <div>
+        <div class="label">${dateStr}</div>
+        <div class="title">今日任务</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        ${S.streak>0?`<div style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--blue);background:#E6F1FB;padding:4px 10px;border-radius:20px;font-weight:500">⭐ ${S.streak} 天</div>`:""}
+        <button onclick="S.showSettings=!S.showSettings;draw()" style="background:var(--bg2);border:.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;color:var(--text2)">⚙️</button>
+      </div>
+    </div>
+
+    ${S.showSettings?`
+    <div class="card" style="margin-bottom:1rem">
+      <div style="padding:.875rem 1rem;border-bottom:.5px solid var(--border);font-size:13px;font-weight:500;color:var(--text)">⚙️ 每日任务设置</div>
+      <div class="settings-row">
+        <span class="settings-label">每日新词</span>
+        <div class="settings-val">
+          ${[5,10,15,20].map(n=>`<button class="settings-btn${S.newPerDay===n?" on":""}" onclick="S.newPerDay=${n};sv();draw()">${n}个</button>`).join("")}
+        </div>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label">测验题数</span>
+        <div class="settings-val">
+          ${[5,10,15].map(n=>`<button class="settings-btn${S.quizCount===n?" on":""}" onclick="S.quizCount=${n};sv();draw()">${n}题</button>`).join("")}
+        </div>
+      </div>
+      <div class="settings-row" style="border-bottom:none">
+        <span class="settings-label">造句题数</span>
+        <div class="settings-val">
+          ${[1,3,5].map(n=>`<button class="settings-btn${S.writeCount===n?" on":""}" onclick="S.writeCount=${n};sv();draw()">${n}题</button>`).join("")}
+        </div>
+      </div>
+    </div>`:""}
+
+    <div class="card" style="margin-bottom:1.25rem;padding:1.125rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem">
+        <span style="font-size:13px;font-weight:500;color:var(--text)">${allDone?"✅ 今日任务全部完成！":"今日进度"}</span>
+        <span style="font-size:13px;font-weight:500;color:var(--blue)">${done} / ${total}</span>
+      </div>
+      <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${allDone?"#1D9E75":"#378ADD"};border-radius:4px;transition:width .4s"></div>
+      </div>
+      ${allDone?`<div style="font-size:12px;color:var(--green);margin-top:.75rem;text-align:center">🎉 太棒了！今天的任务全部完成</div>`:`<div style="font-size:12px;color:var(--text3);margin-top:.75rem">还剩 ${total-done} 个任务</div>`}
+    </div>
+
+    <div style="margin-bottom:1.25rem">
+      <div class="${"task-row"+(S.taskFlash?" done":"")}" onclick="go('flash')">
+        <div class="task-check">${S.taskFlash?"✓":""}</div>
+        <div class="task-info">
+          <div class="task-title">📚 闪卡</div>
+          <div class="task-sub">${newW.length}个新词 + ${Math.min(revW.length,5)}个复习 · 共${newW.length+Math.min(revW.length,5)}张</div>
+        </div>
+        <div class="task-arrow">›</div>
+      </div>
+
+      <div class="${"task-row"+(S.taskQuiz?" done":"")}" onclick="go('quiz')">
+        <div class="task-check">${S.taskQuiz?"✓":""}</div>
+        <div class="task-info">
+          <div class="task-title">✏️ 测验</div>
+          <div class="task-sub">${S.quizCount}题选择题</div>
+        </div>
+        <div class="task-arrow">›</div>
+      </div>
+
+      <div class="${"task-row"+(S.taskWrite?" done":"")}" onclick="go('write')">
+        <div class="task-check">${S.taskWrite?"✓":""}</div>
+        <div class="task-info">
+          <div class="task-title">📝 造句</div>
+          <div class="task-sub">${S.writeCount}个造句题，看参考答案对比</div>
+        </div>
+        <div class="task-arrow">›</div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:12px;padding:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem">
+      <div style="text-align:center">
+        <div style="font-size:20px;font-weight:500;color:var(--green)">${mastered}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:1px">已掌握</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:20px;font-weight:500;color:var(--blue)">${Object.values(S.cards).filter(x=>x==="u").length}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:1px">复习中</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:20px;font-weight:500;color:var(--red)">${V.filter(v=>!S.cards[v.id]).length}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:1px">待学习</div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border-radius:12px;padding:1rem">
+      <div style="font-size:12px;color:var(--text3);margin-bottom:.5rem">💬 额外练习（随时可做）</div>
+      <button onclick="go('speak')" style="width:100%;background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:.75rem;text-align:left;cursor:pointer;font-family:inherit;font-size:13px;color:var(--text)">
+        角色扮演对话 — CMO / 澳洲总部 / 跨部门协作等 ›
+      </button>
+    </div>
+  </div>`;
+}
+
+// ── FLASH ────────────────────────────────────────────────────────
+function drawFlash(){
+  const fl=getFlashWords(),idx=S.fi%Math.max(fl.length,1),v=fl[idx];
+  const m=Object.values(S.cards).filter(x=>x==="k").length;
+  const rv=Object.values(S.cards).filter(x=>x==="u").length;
+  const n=V.filter(v=>!S.cards[v.id]).length;
+  const pct=fl.length>0?Math.round((idx/fl.length)*100):0;
+  const allCats=[["all","全部"],["review","复习"],["new","新词"],["verb","动词"],["adj","形容词"],["noun","名词"],["ind","行业词"],["expr","句式"],["logic","逻辑词"],["data","数据"],["phrase","口语"]];
+  if(!v)return`<div class="pad"><p style="text-align:center;color:var(--text3);padding:2rem">换个筛选试试</p></div>`;
+  return`<div class="pad">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div><div class="label">闪卡</div><div class="title">Brand Vocab</div></div>
+      <button onclick="S.taskFlash=true;markStreak();sv();go('today')" style="font-size:12px;padding:5px 12px;border-radius:20px;background:#E1F5EE;border:none;color:#0F6E56;cursor:pointer;font-family:inherit">✓ 标记完成</button>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem">
+      ${allCats.map(([f,l])=>`<button class="fb${S.ff===f?" on":""}" onclick="S.ff='${f}';S.fi=0;S.flip=false;draw()">${l}</button>`).join("")}
+    </div>
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem">
+      <div class="pbbar"><div class="pbfill" style="width:${pct}%"></div></div>
+      <span style="font-size:12px;color:var(--text2);min-width:52px">${idx+1} / ${fl.length}</span>
+    </div>
+    <div class="flip-container" onclick="S.flip=!S.flip;draw()">
+      <div class="flip-card${S.flip?' flipped':''}">
+        <div class="flip-front">
+          <div style="padding:1.5rem 1.125rem 2rem">
+            <div style="display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap">
+              ${p(v.t,TC[v.t]||"pb")} ${p(CL[v.c]||v.c,"pb")}
+            </div>
+            <div class="word" style="margin-bottom:1.25rem">${v.e}</div>
+            <div style="font-size:12px;color:var(--text3)">Think of the meaning, then tap to reveal →</div>
+          </div>
+        </div>
+        <div class="flip-back">
+          <div style="padding:1.125rem">
+            <div style="display:flex;gap:6px;margin-bottom:.875rem;flex-wrap:wrap">
+              ${p(v.t,TC[v.t]||"pb")} ${p(CL[v.c]||v.c,"pb")}
+            </div>
+            <div class="word" style="font-size:22px;margin-bottom:.25rem">${v.e} <button class="speak-btn" onclick="event.stopPropagation();speak('${v.e.replace(/'/g,"\'")}')">🔊</button></div>
+            <div style="font-size:15px;color:var(--blue);margin-bottom:1rem;font-weight:500">${v.z}</div>
+            <div style="height:.5px;background:var(--border);margin-bottom:.875rem"></div>
+            <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem">example</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.75;font-style:italic;font-family:Georgia,serif">${v.x} <button class="speak-btn" onclick="event.stopPropagation();speakEx(this)" data-ex="${v.x.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}">🔊</button></div>
+          </div>
+          <div style="display:flex;gap:8px;padding:0 1.125rem 1.125rem">
+            <button class="btn-a bk" onclick="event.stopPropagation();mk('${v.id}','k')">Know it ✓</button>
+            <button class="btn-a bu" onclick="event.stopPropagation();mk('${v.id}','u')">Unsure</button>
+            <button class="btn-a bn" onclick="event.stopPropagation();mk('${v.id}','n')">New</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="flip-spacer"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div class="stat"><div class="sn" style="color:var(--green)">${m}</div><div class="sl">mastered</div></div>
+      <div class="stat"><div class="sn" style="color:var(--blue)">${rv}</div><div class="sl">reviewing</div></div>
+      <div class="stat"><div class="sn" style="color:var(--red)">${n}</div><div class="sl">to learn</div></div>
+    </div>
+  </div>`;
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────────
+function drawQuiz(){
+  if(!S.qq)S.qq=buildQ(S.quizCount);
+  if(S.qdone){
+    const sc=S.qsc,total=S.quizCount;
+    return`<div class="pad" style="text-align:center;padding-top:3rem">
+      <div style="font-size:52px;margin-bottom:.75rem">🎉</div>
+      <div style="font-family:Georgia,serif;font-size:26px;color:var(--text);margin-bottom:.5rem">Quiz complete</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:1rem">${sc} / ${total} correct</div>
+      <div style="font-size:40px;font-weight:500;color:${sc/total>=.8?"var(--green)":sc/total>=.5?"var(--blue)":"var(--red)"};margin-bottom:2rem">${Math.round(sc/total*100)}%</div>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="sbtn" onclick="S.taskQuiz=true;markStreak();sv();go('today')">✓ 完成，返回今日</button>
+        <button onclick="S.qq=buildQ(S.quizCount);S.qi=0;S.qs=null;S.qsc=0;S.qdone=false;draw()" style="padding:10px 18px;border-radius:10px;border:.5px solid var(--border2);background:transparent;color:var(--text2);font-family:inherit;font-size:13px;cursor:pointer">再来一次</button>
+      </div>
+    </div>`;
+  }
+  const q=S.qq[S.qi];
+  return`<div class="pad">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div><div class="label">测验 · ${S.qi+1} / ${S.quizCount}</div></div>
+    </div>
+    <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:1rem">
+      <div style="height:100%;width:${(S.qi/S.quizCount)*100}%;background:#378ADD;border-radius:3px;transition:width .3s"></div>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:1.125rem">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.75rem">这个词是什么意思？</div>
+      <div class="word" style="font-size:24px">${q.v.e} <button class="speak-btn" onclick="speak('${q.v.e.replace(/'/g,"\\'")}')">🔊</button></div>
+      <div style="display:flex;gap:6px;margin-top:.5rem;flex-wrap:wrap">${p(q.v.t,TC[q.v.t]||"pb")} ${p(CL[q.v.c]||q.v.c,"pb")}</div>
+    </div>
+    <div style="margin-bottom:1rem">
+      ${q.opts.map(o=>{
+        let bg="var(--bg)",bc="var(--border2)",fc="var(--text)";
+        if(S.qs!==null){if(o.id===q.c){bg="#E1F5EE";bc="#1D9E75";fc="#085041";}else if(o.id===S.qs&&S.qs!==q.c){bg="#FCEBEB";bc="#E24B4A";fc="#791F1F";}}
+        return`<button class="quiz-opt" onclick="ansQ('${o.id}')" style="background:${bg};border-color:${bc};color:${fc}">${o.z}</button>`;
+      }).join("")}
+    </div>
+    ${S.qs?`<div style="background:var(--bg2);border-radius:10px;padding:1rem;font-size:13px;color:var(--text2);line-height:1.65;font-style:italic;font-family:Georgia,serif">${q.v.x} <button class="speak-btn" onclick="speakEx(this)" data-ex="${q.v.x.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}">🔊</button></div>`:""}
+  </div>`;
+}
+function ansQ(id){
+  if(S.qs!==null)return;
+  S.qs=id;const q=S.qq[S.qi];
+  if(id===q.c)S.qsc++;
+  S.cards[q.v.id]=id===q.c?"k":"u";markStreak();sv();draw();
+  setTimeout(()=>{if(S.qi+1>=S.quizCount)S.qdone=true;else{S.qi++;S.qs=null;}draw();},1300);
+}
+
+// ── WRITE ─────────────────────────────────────────────────────────
+function drawWrite(){
+  const p2=WP[S.wi%WP.length];
+  return`<div class="pad">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div><div class="label">造句 · ${(S.wi%WP.length)+1} / ${WP.length}</div><div class="title">Writing Practice</div></div>
+      <button onclick="S.taskWrite=true;markStreak();sv();go('today')" style="font-size:12px;padding:5px 12px;border-radius:20px;background:#E1F5EE;border:none;color:#0F6E56;cursor:pointer;font-family:inherit">✓ 标记完成</button>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:1.125rem">
+      <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:.875rem">用以下词汇写一句英文——${p2.cn}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${p2.w.map(w=>`<span style="background:var(--yellow);color:var(--yellowt);font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;font-family:Georgia,serif;font-style:italic">${w}</span>`).join("")}
+      </div>
+    </div>
+    <textarea placeholder="Write your sentence in English here..." rows="4" style="margin-bottom:1rem" oninput="S.wt=this.value">${S.wt}</textarea>
+    <div style="display:flex;gap:8px;margin-bottom:1rem">
+      <button class="sbtn" style="flex:1" onclick="S.wshow=true;draw()" ${!S.wt.trim()?"disabled":""}>查看参考答案</button>
+      <button onclick="S.wi++;S.wt='';S.wshow=false;draw()" style="padding:10px 16px;border-radius:10px;border:.5px solid var(--border2);background:transparent;color:var(--text2);font-family:inherit;font-size:13px;cursor:pointer">换一题</button>
+    </div>
+    ${S.wshow?`
+      <div style="background:var(--bg2);border-radius:12px;padding:1rem;margin-bottom:.75rem">
+        <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem">参考答案</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.75;font-style:italic;font-family:Georgia,serif">${p2.ref} <button class="speak-btn" onclick="speakEx(this)" data-ex="${p2.ref.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}">🔊</button></div>
+      </div>
+      <div style="background:#E6F1FB;border-radius:10px;padding:.875rem;font-size:12px;color:#185FA5;line-height:1.6">
+        💡 对比你的句子和参考答案：用词是否专业？逻辑是否清晰？可以复制到Claude进一步批改。
+      </div>
+    `:""}
+  </div>`;
+}
+
+// ── SPEAK ─────────────────────────────────────────────────────────
+function drawSpeak(){
+  if(S.sr===null)return`<div class="pad">
+    <div style="margin-bottom:1rem"><div class="label">额外练习</div><div class="title">角色扮演对话</div></div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem;line-height:1.6">选择场景，用英语练习真实工作沟通。先自己口头作答，再查看参考答案对比。</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${SPEAK_SCENES.map((sc,i)=>`<button onclick="S._si=${i};S.sr=sc;S.sqi=0;S.sshow=false;draw()" style="background:var(--bg);border:.5px solid var(--border);border-radius:12px;padding:1rem;text-align:left;cursor:pointer;font-family:inherit">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:15px;font-weight:500;color:var(--text)">${sc.l}</span>
+          <span class="pill pb" style="font-size:10px">${sc.d}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text3)">${sc.qa.length} 个练习问题</div>
+      </button>`).join("")}
+    </div>
+  </div>`;
+
+  const sc=S.sr,qa=sc.qa[S.sqi];
+  return`<div class="pad">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
+      <button onclick="S.sr=null;draw()" style="background:transparent;border:none;cursor:pointer;color:var(--text2);padding:0;font-size:20px">←</button>
+      <div><div class="title">${sc.l}</div><div class="label">${sc.d} · ${S.sqi+1}/${sc.qa.length}</div></div>
+    </div>
+    <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:1rem">
+      <div style="height:100%;width:${((S.sqi+1)/sc.qa.length)*100}%;background:#378ADD;border-radius:2px"></div>
+    </div>
+    <div class="card" style="margin-bottom:1rem;padding:1.125rem">
+      <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.625rem">对方问你</div>
+      <div style="font-size:15px;color:var(--text);line-height:1.6;font-style:italic;font-family:Georgia,serif">"${qa.q}" <button class="speak-btn" onclick="speakEx(this)" data-ex="${qa.q.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}">🔊</button></div>
+    </div>
+    <div style="background:var(--bg2);border-radius:12px;padding:1rem;margin-bottom:1rem">
+      <div style="font-size:12px;color:var(--text3);line-height:1.6">① 先用英语口头回答，说30-60秒<br>② 点击查看参考答案，对比自己的表达<br>③ 注意用了哪些关键词，哪里可以更专业</div>
+    </div>
+    ${S.sshow?`
+      <div style="background:var(--bg2);border-radius:12px;padding:1rem;margin-bottom:1rem">
+        <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem">参考答案</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.75;font-family:Georgia,serif">${qa.a} <button class="speak-btn" onclick="speakEx(this)" data-ex="${qa.a.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}">🔊</button></div>
+      </div>
+    `:""}
+    <div style="display:flex;gap:8px">
+      <button class="sbtn" style="flex:1" onclick="S.sshow=!S.sshow;draw()">${S.sshow?"隐藏参考答案":"查看参考答案"}</button>
+      ${S.sqi+1<sc.qa.length?
+        `<button onclick="S.sqi++;S.sshow=false;draw()" style="padding:10px 16px;border-radius:10px;border:.5px solid var(--border2);background:transparent;color:var(--text2);font-family:inherit;font-size:13px;cursor:pointer">下一题 ›</button>`:
+        `<button onclick="S.sr=null;draw()" style="padding:10px 16px;border-radius:10px;border:.5px solid var(--border2);background:transparent;color:var(--text2);font-family:inherit;font-size:13px;cursor:pointer">完成</button>`}
+    </div>
+  </div>`;
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────
+function drawProg(){
+  const m=Object.values(S.cards).filter(x=>x==="k").length;
+  const rv=Object.values(S.cards).filter(x=>x==="u").length;
+  const n=V.filter(v=>!S.cards[v.id]).length;
+  const pct=Math.round((m/V.length)*100);
+  const bt={};V.forEach(v=>{if(!bt[v.t])bt[v.t]={tot:0,m:0};bt[v.t].tot++;if(S.cards[v.id]==="k")bt[v.t].m++;});
+  const catNames={correction:"纠偏词",blank:"空白词",brand:"品牌词",digital:"数字营销",compliance:"合规",fmcg:"消费品",formula:"配方奶粉",crm:"CRM",npd:"NPD",supplier:"供应商",meeting:"职场表达",email:"邮件",connector:"逻辑词",data:"数据表达",number:"数字",preposition:"介词",collocation:"搭配",videocall:"视频会议",aus:"澳洲口语",sea:"东南亚",leadership:"领导力",finance:"财务"};
+  return`<div class="pad">
+    <div style="margin-bottom:1.25rem"><div class="label">Progress</div><div class="title">学习进度</div></div>
+    <div class="card" style="padding:1.25rem;margin-bottom:1rem;text-align:center">
+      <div style="font-family:Georgia,serif;font-size:52px;font-weight:500;color:var(--blue);line-height:1">${pct}%</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:.5rem">overall mastery · ${m} / ${V.length} words</div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:1rem">
+        <div style="height:100%;width:${pct}%;background:#378ADD;border-radius:3px;transition:width .5s"></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem">
+      <div class="stat"><div class="sn" style="color:var(--green)">${m}</div><div class="sl">mastered</div></div>
+      <div class="stat"><div class="sn" style="color:var(--blue)">${rv}</div><div class="sl">reviewing</div></div>
+      <div class="stat"><div class="sn" style="color:var(--red)">${n}</div><div class="sl">to learn</div></div>
+    </div>
+    ${S.streak>0?`<div style="background:#E6F1FB;border-radius:12px;padding:1rem;display:flex;align-items:center;gap:10px;margin-bottom:1rem">
+      <span style="font-size:24px">⭐</span>
+      <div><div style="font-size:15px;font-weight:500;color:var(--blue)">${S.streak} 天连续学习</div><div style="font-size:12px;color:#378ADD">Keep it up, Kiwi!</div></div>
+    </div>`:""}
+    <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:.75rem">按类别进度</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${Object.entries(bt).sort((a,b)=>b[1].m/b[1].tot-a[1].m/a[1].tot).map(([t,{tot,m:mc}])=>`
+        <div style="background:var(--bg2);border-radius:10px;padding:.75rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+            <span class="pill ${TC[t]||'pb'}">${catNames[t]||t}</span>
+            <span style="font-size:12px;color:var(--text2)">${mc}/${tot}</span>
+          </div>
+          <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:${Math.round(mc/tot*100)}%;background:#378ADD;border-radius:2px"></div>
+          </div>
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+// ── DRAW ──────────────────────────────────────────────────────────
+function draw(){
+  const el=document.getElementById("app");
+  if(!el)return;
+  if(S.tab==="today")el.innerHTML=drawToday();
+  else if(S.tab==="flash")el.innerHTML=drawFlash();
+  else if(S.tab==="quiz")el.innerHTML=drawQuiz();
+  else if(S.tab==="write")el.innerHTML=drawWrite();
+  else if(S.tab==="speak")el.innerHTML=drawSpeak();
+  else el.innerHTML=drawProg();
+}
+
+draw();
+</script>
+</body>
+</html>
